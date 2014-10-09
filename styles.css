@@ -1,0 +1,129 @@
+﻿body{
+	font-family: Arial, Verdana, Tahoma, Sans-serif;
+	margin:3px;
+}
+th, td{border:1px solid #ddd;}
+IMG{border:0;}
+P{margin:0;}
+A{text-decoration:none;color:black;}
+A:active{text-decoration:none;color:black;}
+A:link{text-decoration:none;color:black;}
+A:visited{color:black}
+A:hover{color:#cc0000;}
+
+h1, h2{
+	margin:10px;
+}
+h1{font-size:18px;}
+h2{font-size:16px;}
+.paramName{
+	font-weight:bold;
+}
+.validation{
+	font-style: italic;
+	padding-left:10px;
+	color:#f00;
+}
+.selectable{
+	cursor: pointer;
+}
+.menu{
+	cursor: pointer;
+	text-decoration: underline;
+	margin: 10px;
+}
+.menu li{
+	display: inline;
+	margin-left:10px;
+}
+.validation{
+	color: red;
+	font-style: italic;
+}
+
+div.panel{
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #ccc;
+}
+
+.hidden{display:none;}
+.queuePos{
+	color:#080;
+	font-weight:bold;
+}
+.frozen{
+	color: #ccc;
+}
+
+div.console{
+	background-color:#004;
+	color:#ffc;
+	padding:5px;
+	margin:5px;
+	margin-top:80px;
+}
+.key{
+	width:300px;
+}
+
+.dataType{
+	color:#aaa;
+}
+span.dataType{
+	margin-right:15px;
+}
+
+div.taskNm.completed, span.completed{
+	color:#ccc;
+}
+.completed{
+	color: #840;
+}
+
+.deadline{
+	color:#f00;
+}
+
+.groupName{
+	margin:8px 0 4px 18px;
+	font-weight: bold;
+}
+
+/* ************ projectView************* */
+.projectView .task .taskList{
+	margin-left:25px;
+}
+.projectView div.task{
+	border: 1px solid #aaa;
+	padding:5px; margin:2px;
+}
+.projectView .resourceList { margin-bottom:10px;}
+.projectView .resourceList h3 { margin-bottom:3px;}
+.projectView .completed {paddingL:10px;}
+.projectView div.task .taskNm {
+	margin:0; margin-right:5px;
+	padding:0;
+	font-weight:bold;
+	/*font-size:100%;*/
+	float:left;
+}
+.projectView div.task .properties{
+	margin:0; margin-top:2px; margin-bottom:3px;
+}
+.projectView div.task ul{
+	margin:0; margin-top:3px; margin-left:20px;
+	padding:0;
+}
+
+.personsList .free{
+	display:none;
+}
+
+
+footer{
+	text-align:center;
+	margin:25px;
+	padding:25px;
+	border-top:1px solid #ccc;
+}
