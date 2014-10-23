@@ -13,6 +13,6 @@
 	}
 });
 
-requirejs(["jquery", "html", "forms/mainMenu"], function($, $H, mainMenu) {
-		mainMenu.view($(".mainMenu"));
+requirejs(["jquery", "html", "forms/adminMenu"], function($, $H, adminMenu) {
+		adminMenu.view($(".mainMenu"));
 });

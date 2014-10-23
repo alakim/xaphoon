@@ -13,7 +13,6 @@
 			if(k.slice(0,1)!="$") continue;
 			var v = model[k];
 			if(typeof(v)=="function") v = v();
-			//console.log(k, v);
 			if(v instanceof Array){
 				var arr = [];
 				for(var el,i=0; el=v[i],i<v.length; i++){
@@ -64,6 +63,11 @@
 			res+="T"+[twoDigits(h), twoDigits(m)].join(":");
 			return res;
 		},
+		formatValue: function(val){with($H){
+			return !val?""
+				:val.match(/@.*\.(ru|com|org)$/i)?a({href:"mailto:"+val}, val)
+				:val;
+		}},
 		getDictSize: function(dict){
 			var i=0;
 			for(var k in dict) i++;
