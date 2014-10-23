@@ -11,7 +11,7 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 		}},
 		organization:function(org, level, columns){with($H){
 			var sections = getSections(org);
-			return div({"class":"orgPanel"},
+			return div({"class":"orgPanel", orgID:org.id},
 				tag("h"+level, [{"class":"orgTitle"}, org.name]),
 				div({"class":"orgSubPanel"},
 					templates.personsTable(sections.persons, columns),
@@ -26,6 +26,7 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 			return table({border:1, cellpadding:3, cellspacing:0},
 				tr(
 					apply(columns, function(v, colID){
+						if(colID=="parent") return;
 						var colDef = colDefs[colID];
 						if(!colDef) alert("Column '"+colID+"' not found");
 						return th(colDef.name);
@@ -34,6 +35,7 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 				apply(persList, function(pers){
 					return tr(
 						apply(columns, function(v, colID){
+							if(colID=="parent") return;
 							return td(
 								util.formatValue(pers[colID])
 							);
@@ -66,11 +68,22 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 		return res;
 	}
 	
+	function expandTree(orgID){
+		$(".orgPanel").each(function(i, pnl){pnl=$(pnl);
+			if(pnl.attr("orgID")==orgID){
+				pnl.show();
+				pnl.find(">.orgSubPanel").show();
+				for(var i=0,prt=pnl.parent(); prt.length&&i<1000; prt=prt.parent(),i++){
+					prt.show();
+				}
+			}
+		});
+	}
 	
 	
 	return {
-		view: function(){
-			function display(tree, columns){ 
+		view: function(orgID){
+			function display(tree, columns, orgID){ 
 				$("#out").html(templates.main(tree, columns));
 				
 				$("#out .orgTitle").click(function(){
@@ -85,9 +98,10 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 				});
 				
 				$("#out table").printVersion();
+				if(orgID) expandTree(orgID);
 			}
 			db.init(function(){
-				display(db.getTree(), db.getColumns());
+				display(db.getTree(), db.getColumns(), orgID);
 			});
 		}
 	};
