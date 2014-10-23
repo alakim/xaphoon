@@ -31,8 +31,12 @@
 					return div(
 						div({"class":"title"}, itm.fio || itm.name),
 						div({"class":"properties"},
+							itm.parent?div(
+								span({style:"font-weight:bold;"}, "Организация "),
+								span({"class":"link orglink", orgID:itm.parent.id, title:"Показать организацию"}, itm.parent.name)
+							):null,
 							apply(itm, function(v, k){
-								if(k=="xmltype" || k=="xmlchildren" || k=="name" || k=="fio") return;
+								if(k=="xmltype" || k=="xmlchildren" || k=="name" || k=="fio" || k=="parent") return;
 								return div(
 									span({style:"font-weight:bold;"}, columns[k]?columns[k].name:k),
 									" ", util.formatValue(v)
@@ -71,10 +75,13 @@
 				$("#resPnl div.title").click(function(){
 					$(this).parent().find(".properties").slideDown();
 				});
+				$("#resPnl .orglink").click(function(){
+					var orgID = $(this).attr("orgID");
+					require("forms/phonebookAccordionView").view(orgID);
+				});
 			}
 		});
 	}
-	
 	
 	
 	return {
