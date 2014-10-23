@@ -1,0 +1,130 @@
+﻿body{
+	font-family: Verdana, Arial, Sans-Serif;
+	margin: 0px;
+}
+
+.mainMenu{
+	border-top: 1px solid #ccc;
+}
+nav ul li{
+	float: left;
+	margin:10px;
+	margin-left: 25px;
+	list-style-type: none;
+}
+#out{
+	border-top: 1px solid #ccc;
+	clear: left;
+	min-height:500px;
+	margin:10px;
+	padding:5px;
+}
+
+header{
+	/*background-color:#eef;*/
+	/*color:#008;*/
+	border-bottom:1px solid #ccc;
+	margin: 0 0 1px 0;
+	padding:0 0 25px 0;
+}
+
+header .logoPnl{
+	float:left;
+	margin:20px 0 0 150px;
+}
+header .site-logo{
+	float:left;
+}
+header .site-header {
+	font-family: "Roboto",sans-serif;
+	font-size: 1.6em;
+	font-weight: 700;
+	margin: 0 0 0 110px;
+	padding: 10px 0 0 0;
+	text-transform: uppercase;
+	color:#d8232a;
+	line-height: 1.42857;
+}
+header .siteTitle {
+	font-family: "Roboto",sans-serif;
+	font-size: 2em;
+	font-weight: 700;
+	padding: 35px 0 0 55px;
+	float:left;
+}
+
+header .site-descriptor {
+	font-size: 0.9em;
+	line-height: 120%;
+	margin: 0 0 0 110px;
+	padding: 0;
+}
+header .addressPnl{
+	margin: 0 0 0 1000px;
+	padding: 25px 0 0 0;
+}
+header .phone {
+	font-size: 1.9em;
+}
+header .header-address {
+	color: #999;
+	font-size: 0.9em;
+	line-height: 140%;
+	margin: 3px 0 0;
+	padding: 0;
+	font-style:normal;
+}
+
+h1{
+	font-size:35px;
+}
+
+footer{
+	text-align:center; 
+	border-top:1px solid #ccc; 
+	padding:10px;
+}
+
+.menu li{
+	cursor: pointer;
+}
+
+div.dialog{
+	margin:25px;
+	padding:10px;
+	border:1px solid #ccc;
+}
+
+.validation{
+	color:#f00;
+}
+
+#resPnl div.title{
+	cursor:pointer;
+}
+#resPnl div.properties{
+	display:none;
+	margin-left: 50px;
+}
+
+#out h1{font-size:20px; padding-left:10px;}
+#out h2{font-size:18px; padding-left:20px;}
+#out h3{font-size:16px; padding-left:40px;}
+#out h4{font-size:14px; padding-left:60px;}
+#out h5{font-size:12px; padding-left:80px;}
+#out h6{font-size:12px; padding-left:100px;}
+
+#out .orgSubPanel{
+	display:none;
+	margin: 0 0 5px 40px;
+	padding: 5px;
+	/*border:1px solid #ccc;*/
+}
+
+.orgTitle{
+	cursor:pointer;
+}
+
+.link{
+	cursor:pointer;
+}
