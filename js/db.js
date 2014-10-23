@@ -40,6 +40,10 @@
 				callback();
 			});
 		},
+		refresh: function(callback){
+			localDB.data = null;
+			this.init(callback);
+		},
 		getTree: function(){
 			return localDB.data.organizations;
 		},
