@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "util", "validation", "errors"], function($, $H, ko, util, validation, errors){
+﻿define(["jquery", "html", "knockout", "db", "util", "validation", "errors"], function($, $H, ko, db, util, validation, errors){
 
 	var templates = {
 		main: function(permissions){with($H){
@@ -7,7 +7,7 @@
 					"Выберите организацию ",
 					select({"class":"selOrg"},
 						apply(permissions, function(prm){
-							return prm.organization?option({value:prm.organization}, organizationIndex.getItem(prm.organization).name):null;
+							return prm.organization?option({value:prm.organization}, db.getOrganization(prm.organization).name):null;
 						})
 					)
 				),
@@ -15,7 +15,7 @@
 			);
 		}},
 		editPanel: function(orgID){with($H){
-			var org = organizationIndex.getItem(orgID);
+			var org = db.getOrganization(orgID);
 			return org?div(
 				h2(org.name),
 				apply(org.xmlchildren, function(el){
@@ -36,27 +36,27 @@
 		});
 	}
 	
-	var organizationIndex = (function(){
-		var index = {};
-		return {
-			build:function(){
-				function indexOrg(org){
-					index[org.id] = org;
-					if(org.xmlchildren){
-						for(var i=0,el,c=org.xmlchildren; el=c[i],i<c.length; i++){
-							if(el.xmltype=="organization") indexOrg(el);
-						}
-					}
-				}
-				$.each($XMLDB.organizations, function(i, org){
-					indexOrg(org);
-				});
-			},
-			getItem: function(orgID){
-				return index[orgID];
-			}
-		};
-	})();
+	// var organizationIndex = (function(){
+	// 	var index = {};
+	// 	return {
+	// 		build:function(){
+	// 			function indexOrg(org){
+	// 				index[org.id] = org;
+	// 				if(org.xmlchildren){
+	// 					for(var i=0,el,c=org.xmlchildren; el=c[i],i<c.length; i++){
+	// 						if(el.xmltype=="organization") indexOrg(el);
+	// 					}
+	// 				}
+	// 			}
+	// 			$.each($XMLDB.organizations, function(i, org){
+	// 				indexOrg(org);
+	// 			});
+	// 		},
+	// 		getItem: function(orgID){
+	// 			return index[orgID];
+	// 		}
+	// 	};
+	// })();
 	
 	function PersonModel(data){var _=this;
 		$.extend(_, {
@@ -69,22 +69,31 @@
 			ticket = $USER.ticket;
 			pnl.html(templates.main());
 
-
-			if(!$XMLDB){
-				$.post("ws/phonebook.php", {}, function(resp){
-					var data = JSON.parse(resp);
-					$XMLDB = data;
-					organizationIndex.build();
-					$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){
-						resp = JSON.parse(resp);
-						pnl.html(templates.main(resp));
+			db.init(function(){
+				$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){resp = JSON.parse(resp);
+					pnl.html(templates.main(resp));
+					viewEditPanel();
+					$("#out .selOrg").change(function(){
 						viewEditPanel();
-						$("#out .selOrg").change(function(){
-							viewEditPanel();
-						});
 					});
 				});
-			}
+			});
+
+			// if(!$XMLDB){
+			// 	$.post("ws/phonebook.php", {}, function(resp){
+			// 		var data = JSON.parse(resp);
+			// 		$XMLDB = data;
+			// 		// organizationIndex.build();
+			// 		$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){
+			// 			resp = JSON.parse(resp);
+			// 			pnl.html(templates.main(resp));
+			// 			viewEditPanel();
+			// 			$("#out .selOrg").change(function(){
+			// 				viewEditPanel();
+			// 			});
+			// 		});
+			// 	});
+			// }
 		}
 	};
 });
