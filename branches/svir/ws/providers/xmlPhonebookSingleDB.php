@@ -19,7 +19,7 @@ class XmlPhonebookSingleDB{
 	}
 	
 
-	
+	// выводит список колонок в формате JSON
 	function writeColumns($outFile){
 		$cols = $this->xpath->query('/phonebook/columns/col');
 		$first = true;
@@ -31,6 +31,7 @@ class XmlPhonebookSingleDB{
 		}
 	}
 
+	// выводит список организаций в формате JSON
 	function writeOrganizations($outFile){
 		$orgs = $this->xpath->query('/phonebook/organizations/organization');
 		$first = true;
@@ -44,6 +45,7 @@ class XmlPhonebookSingleDB{
 
 
 	
+	// выводит все содержимое в формате JSON
 	function writeContent($clearCache){
 		if(!file_exists(self::$cachedFile) || $clearCache){
 			$file = fopen(self::$cachedFile, 'w');
@@ -70,11 +72,13 @@ class XmlPhonebookSingleDB{
 		return $this->dbDoc;
 	}
 	
+	// сохраняет документ, обновляет кэш
 	function saveDocument(){
 		$this->dbDoc->save(self::$docPath) or die('Error saving '.self::$docPath);
 		if(file_exists(self::$cachedFile)) unlink(self::$cachedFile);
 	}
 	
+	// сохраняет данные сотрудника
 	function savePerson($id, $data){
 		$node = $this->xpath->query("//person[@id='".$id."']")->item(0);
 		foreach($data as $key => $val){

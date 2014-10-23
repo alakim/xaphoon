@@ -116,7 +116,7 @@
 			$workPhone:ko.observable(""), //.extend({required:"Укажите рабочий телефон"}),
 			$fax:ko.observable(""), //.extend({required:"Укажите факс"}),
 			$mobPhone:ko.observable(""), //.extend({required:"Укажите мобильный телефон"}),
-			$email:ko.observable("").extend({required:"Укажите электронный адрес"}),
+			$email:ko.observable("").extend({requiredEMail:"Укажите электронный адрес"}),
 			$roomNr:ko.observable("").extend({required:"Укажите номер комнаты"}),
 			$address:ko.observable("")//.extend({required:"Укажите почтовый адрес"})
 		});
@@ -132,6 +132,7 @@
 				}
 			},
 			submitData: function(){var _=this;
+				if(!validation.validate(_)) return;
 				var res = {id:_.id, ticket:ticket};
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
