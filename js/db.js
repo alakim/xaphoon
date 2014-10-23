@@ -7,7 +7,8 @@
 	
 	
 	function indexDB(){
-		function indexNode(nd){
+		function indexNode(nd, parent){
+			if(parent) nd.parent = parent;
 			if(nd.xmltype=="organization"){
 				organizations.push(nd);
 				organizationIndex[nd.id] = nd;
@@ -18,7 +19,7 @@
 			}
 			if(nd.xmlchildren){
 				$.each(nd.xmlchildren, function(i, cNd){
-					indexNode(cNd);
+					indexNode(cNd, nd);
 				});
 			}
 		}
@@ -44,23 +45,11 @@
 			localDB.data = null;
 			this.init(callback);
 		},
-		getTree: function(){
-			return localDB.data.organizations;
-		},
-		getColumns: function(){
-			return localDB.data.columns;
-		},
-		getOrganization: function(id){
-			return organizationIndex[id];
-		},
-		getPerson: function(id){
-			return personIndex[id];
-		},
-		getAllOrganizations: function(){
-			return organizations;
-		},
-		getAllPersons: function(){
-			return persons;
-		}
+		getTree: function(){return localDB.data.organizations;},
+		getColumns: function(){return localDB.data.columns;},
+		getOrganization: function(id){return organizationIndex[id];},
+		getPerson: function(id){return personIndex[id];},
+		getAllOrganizations: function(){return organizations;},
+		getAllPersons: function(){return persons;}
 	};
 });
