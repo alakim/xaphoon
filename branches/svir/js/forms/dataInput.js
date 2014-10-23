@@ -62,7 +62,8 @@
 							util.validMsg("$address")
 						))
 					),
-					input({type:"button", "data-bind":"click:submitData", value:"Ввод"})
+					input({type:"button", "data-bind":"click:submitData", value:"Ввод"}),
+					span({"class":"savingIcon", style:"display:none"}, "Идет сохранение...")
 				)
 			):null;
 		}}
@@ -108,6 +109,7 @@
 
 	function PersonModel(){var _=this;
 		$.extend(_, {
+			id:null,
 			$fio:ko.observable("").extend({required:"Укажите ФИО"}),
 			$post:ko.observable("").extend({required:"Укажите должность"}),
 			$inPhone:ko.observable(""), //.extend({required:"Укажите внутренний телефон"}),
@@ -121,6 +123,7 @@
 		
 		$.extend(_, {
 			openDialog: function(person){var _=this;
+				_.id = person.id;
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
 						var val = person?person[mapping.getJsonAttr(k)]:"";
@@ -128,8 +131,8 @@
 					}
 				}
 			},
-			submitData: function(){
-				var res = {};
+			submitData: function(){var _=this;
+				var res = {id:_.id, ticket:ticket};
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
 						var attNm = mapping.getJsonAttr(k);
@@ -137,7 +140,19 @@
 						res[attNm] = val==null?"":val;
 					}
 				}
-				console.log(res);
+				//console.log(res);
+				$("#out .savingIcon").show();
+				$.post("ws/savePerson.php", res, function(resp){resp = JSON.parse(resp);
+					$("#out .savingIcon").hide();
+					if(resp.error){
+						alert(errors.code[resp.error]);
+						return;
+					}
+					$(".personDialog").hide();
+					db.refresh(function(){
+						viewEditPanel();
+					});
+				});
 			}
 		});
 	}

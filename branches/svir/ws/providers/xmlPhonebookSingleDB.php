@@ -72,7 +72,16 @@ class XmlPhonebookSingleDB{
 	
 	function saveDocument(){
 		$this->dbDoc->save(self::$docPath) or die('Error saving '.self::$docPath);
-		unlink(self::$cachedFile);
+		if(file_exists(self::$cachedFile)) unlink(self::$cachedFile);
+	}
+	
+	function savePerson($id, $data){
+		$node = $this->xpath->query("//person[@id='".$id."']")->item(0);
+		foreach($data as $key => $val){
+			$node->setAttribute($key, $val);
+		}
+		$this->saveDocument();
+		echo('{"success":true}');
 	}
 }
 
