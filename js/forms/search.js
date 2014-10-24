@@ -4,21 +4,20 @@
 			return div(
 				div(
 					"Искать ",
-					select({"data-bind":"value:itemType"},
+					select({"class":"selItemType", "data-bind":"value:itemType"},
 						option({value:"person"}, "Сотрудника"),
 						false?option({value:"organization"}, "Организацию"):null
 					)
 				),
 				div(
 					"Поиск по полю: ",
-					select({"data-bind":"value:searchField"},
+					select({"class":"selSearchField", "data-bind":"value:searchField"},
 						apply(db.getColumns(), function(col){
 							return option({value:col.id}, col.name);
 						})
 					),
 					" искать значение: ",
-					input({type:"text", "data-bind":"value:searchString"}),
-					input({type:"button", value:"Найти", "data-bind":"click:search"})
+					input({type:"text", "class":"tbSearchString", "data-bind":"value:searchString,event:{keypress:startSearch}"})
 				),
 				div({id:"resPnl"})
 			);
@@ -49,47 +48,62 @@
 		}}
 	};
 	
-	function Model(){var _=this;
-		$.extend(_, {
-			itemType: ko.observable("person"),
-			searchField: ko.observable("fio"),
-			searchString: ko.observable("").extend({required:"Введите строку поиска"})
-		});
-		$.extend(_, {
-			search: function(){
-				if(!validation.validate(_)) return;
-				var itmType = _.itemType(),
-					field = _.searchField(),
-					re = new RegExp(_.searchString(), "ig"),
-					res = [];
-				var coll = itmType=="organization"?db.getAllOrganizations()
-					:itmType=="person"?db.getAllPersons()
-					:null;
-				if(!coll) alert("Неопределенное множество поиска "+itmType);
-				
-				$.each(coll, function(i, itm){
-					var val = itm[field];
-					if(val && val.match(re)) res.push(itm);
-				});
-				$("#resPnl").html(templates.report(res));
-				$("#resPnl div.title").click(function(){
-					$(this).parent().find(".properties").slideDown();
-				});
-				$("#resPnl .orglink").click(function(){
-					var orgID = $(this).attr("orgID");
-					require("forms/phonebookAccordionView").view(orgID);
-				});
+	var keyDelay = (function(){
+		var delay = 300,
+			collecting = false;
+		return function(callback){
+			if(!collecting){
+				collecting = true;
+				setTimeout(function(){
+					callback();
+					collecting = false;
+				}, delay);
 			}
-		});
+		};
+	})();
+	
+	function startSearch(){
+		keyDelay(search);
 	}
 	
+	function search(){
+		var sStr = $("#out .tbSearchString").val(),
+			itmType = $("#out .selItemType").val(),
+			field = $("#out .selSearchField").val();
+		
+		sStr = sStr.replace(/\\/g, "");
+		var re = new RegExp(sStr, "ig"),
+			res = [];
+		var coll = itmType=="organization"?db.getAllOrganizations()
+			:itmType=="person"?db.getAllPersons()
+			:null;
+		if(!coll) alert("Неопределенное множество поиска "+itmType);
+		
+		$.each(coll, function(i, itm){
+			var val = itm[field];
+			if(val && val.match(re)) res.push(itm);
+		});
+		$("#resPnl").html(templates.report(res));
+		$("#resPnl div.title").click(function(){
+			$(this).parent().find(".properties").slideDown();
+		});
+		$("#resPnl .orglink").click(function(){
+			var orgID = $(this).attr("orgID");
+			require("forms/phonebookAccordionView").view(orgID);
+		});
+	}
 	
 	return {
 		view: function(){
 			function display(){
 				var pnl = $("#out")
 				pnl.html(templates.main());
-				ko.applyBindings(new Model(), pnl.find("div")[0]);
+				pnl.find(".tbSearchString").keyup(startSearch);
+				pnl.find(".selItemType").click(search);
+				pnl.find(".selSearchField").click(search);
+				pnl.find(".selSearchField option").each(function(i,el){el=$(el);
+					if(el.val()=='fio') el.attr("selected", true);
+				});
 			}
 			db.init(function(){
 					display();
