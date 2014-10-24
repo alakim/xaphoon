@@ -4,28 +4,49 @@
 			return div(
 				div(
 					"Искать ",
-					select({"class":"selItemType", "data-bind":"value:itemType"},
-						option({value:"person"}, "Сотрудника"),
-						false?option({value:"organization"}, "Организацию"):null
+					select({"class":"selItemType"},
+						option({value:"person", selected:true}, "Сотрудника"),
+						true?option({value:"organization"}, "Организацию"):null
 					)
 				),
 				div(
 					"Поиск по полю: ",
-					select({"class":"selSearchField", "data-bind":"value:searchField"},
-						apply(db.getColumns(), function(col){
-							return option({value:col.id}, col.name);
-						})
+					select({"class":"selSearchField"},
+						templates.fieldList("person")
 					),
 					" искать значение: ",
-					input({type:"text", "class":"tbSearchString", "data-bind":"value:searchString,event:{keypress:startSearch}"})
+					input({type:"text", "class":"tbSearchString"})
 				),
 				div({id:"resPnl"})
 			);
 		}},
+		fieldList: function(iType){with($H){
+			var coll = iType=="person"?db.getPersonTypeColumns()
+				:iType=="organization"?db.getOrgTypeColumns()
+				:null;
+			return coll?markup(
+				apply(coll, function(fld){
+					var colDef = db.getColumns()[fld],
+						attr = {value:fld};
+					if(fld=="fio" || fld=="name") attr.selected = true;
+					return colDef?option(attr, colDef.name):null;
+				})
+			):null;
+		}},
+		total: function(count){with($H){
+			var last = count%10;
+			var tpl = count==0?"Ничего не найдено"
+				:count>9&&count<20?"Найдено {0} записей:"
+				:last==1?"Найдена {0} запись:"
+				:last>1&&last<5?"Найдено {0} записи:"
+				:"Найдено {0} записей:";
+			return p({style:"font-weight:bold; margin:10px 0 8px 0;"}, format(tpl, count));
+		}},
 		report: function(res){with($H){
+			if(!res.length) return "";
 			var columns = db.getColumns();
 			return div(
-				p(format("Найдено {0} записей:", res.length)),
+				templates.total(res.length),
 				apply(res, function(itm){
 					return div(
 						div({"class":"title"}, itm.fio || itm.name),
@@ -71,6 +92,11 @@
 			itmType = $("#out .selItemType").val(),
 			field = $("#out .selSearchField").val();
 		
+		if(!sStr || !sStr.length){
+			$("#resPnl").html("");
+			return;
+		}
+		
 		sStr = sStr.replace(/\\/g, "");
 		var re = new RegExp(sStr, "ig"),
 			res = [];
@@ -93,17 +119,24 @@
 		});
 	}
 	
+	
+	function changeType(){
+		var iType = $("#out .selItemType").val();
+		$("#out .selSearchField").html(templates.fieldList(iType));
+		search();
+	}
+	
 	return {
 		view: function(){
 			function display(){
 				var pnl = $("#out")
 				pnl.html(templates.main());
 				pnl.find(".tbSearchString").keyup(startSearch);
-				pnl.find(".selItemType").click(search);
+				pnl.find(".selItemType").click(changeType);
 				pnl.find(".selSearchField").click(search);
-				pnl.find(".selSearchField option").each(function(i,el){el=$(el);
-					if(el.val()=='fio') el.attr("selected", true);
-				});
+				// pnl.find(".selSearchField option").each(function(i,el){el=$(el);
+				// 	if(el.val()=='fio') el.attr("selected", true);
+				// });
 			}
 			db.init(function(){
 					display();
