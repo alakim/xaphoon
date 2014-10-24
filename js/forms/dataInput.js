@@ -11,8 +11,9 @@
 						})
 					)
 				),
+				div({"class":"editPnl"}),
 				div({style:"clear:both;"}),
-				div({"class":"editPnl"})
+				div(input({type:"button", "class":"btAddPerson", value:"Добавить сотрудника", style:"margin:8px 0 0 0"}))
 			);
 		}},
 		editPanel: function(orgID){with($H){
@@ -65,8 +66,7 @@
 					),
 					input({type:"button", "data-bind":"click:submitData", value:"Ввод"}),
 					span({"class":"savingIcon", style:"display:none"}, "Идет сохранение...")
-				),
-				div(input({type:"button", value:"Добавить сотрудника", "data-bind":"click:addPerson"}))
+				)
 			):null;
 		}}
 	};
@@ -83,6 +83,11 @@
 			model.openDialog(person);
 			$(".personDialog").show();
 		});
+		$("#out .btAddPerson").click(function(){
+			model.openDialog();
+			$(".personDialog").show();
+		});
+
 		
 		ko.applyBindings(model, pnl.find(".personDialog")[0]);
 	}
@@ -125,7 +130,7 @@
 		
 		$.extend(_, {
 			openDialog: function(person){var _=this;
-				_.id = person.id;
+				_.id = person?person.id:null;
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
 						var val = person?person[mapping.getJsonAttr(k)]:"";
@@ -136,6 +141,7 @@
 			submitData: function(){var _=this;
 				if(!validation.validate(_)) return;
 				var res = {id:_.id, ticket:ticket};
+				res.orgID = $("#out .selOrg").val();
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
 						var attNm = mapping.getJsonAttr(k);
@@ -145,7 +151,7 @@
 				}
 				//console.log(res);
 				$("#out .savingIcon").show();
-				$.post("ws/savePerson.php", res, function(resp){resp = JSON.parse(resp);
+				$.post(_.id?"ws/savePerson.php":"ws/addPerson.php", res, function(resp){resp = JSON.parse(resp);
 					$("#out .savingIcon").hide();
 					if(resp.error){
 						alert(errors.code[resp.error]);
@@ -156,23 +162,24 @@
 						viewEditPanel();
 					});
 				});
-			},
-			addPerson: function(){var _=this;
-				alert(1);
 			}
 		});
 	}
 	
+	//function addPerson(){
+	//	model.openDialog();
+	//	$(".personDialog").show();
+	//}
 	
 	return {
 		view: function(){
 			pnl = $("#out");
 			ticket = $USER.ticket;
-			pnl.html(templates.main());
 
 			db.init(function(){
 				$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){resp = JSON.parse(resp);
 					pnl.html(templates.main(resp));
+					//pnl.find(".btAddPerson").click(addPerson);
 					viewEditPanel();
 					$("#out .selOrg").change(function(){
 						$("#out .editPnl").html("");
