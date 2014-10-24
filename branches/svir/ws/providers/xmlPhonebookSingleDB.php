@@ -115,6 +115,15 @@ class XmlPhonebookSingleDB{
 		$this->saveDocument();
 		echo('{"success":true}');
 	}
+	
+	// удаляет данные сотрудника
+	function delPerson($id){
+		$node = $this->xpath->query("//person[@id='".$id."'][1]")->item(0);
+		$node->parentNode->removeChild($node);
+		
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
 }
 
 
