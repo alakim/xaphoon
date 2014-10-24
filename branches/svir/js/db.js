@@ -3,11 +3,25 @@
 		organizations = [],
 		persons = [],
 		organizationIndex = {},
-		personIndex = {};
+		personIndex = {},
+		personTypeColumns = [],
+		orgTypeColumns = [];
 	
 	
 	function indexDB(){
+		var pCols = {},
+			oCols = {};
+		function collectColumns(nd){
+			var dict = nd.xmltype=="person"?pCols
+				:nd.xmltype=="organization"?oCols
+				:null;
+			if(!dict)return;
+			for(var k in nd){
+				dict[k]=true;
+			}
+		}
 		function indexNode(nd, parent){
+			collectColumns(nd);
 			if(parent) nd.parent = parent;
 			if(nd.xmltype=="organization"){
 				organizations.push(nd);
@@ -26,6 +40,13 @@
 		$.each(localDB.data.organizations, function(i, org){
 			indexNode(org);
 		});
+		
+		personTypeColumns = [];
+		for(var k in pCols) personTypeColumns.push(k);
+		
+		orgTypeColumns = [];
+		for(var k in oCols) orgTypeColumns.push(k);
+		
 	}
 	
 	return {
@@ -50,6 +71,8 @@
 		getOrganization: function(id){return organizationIndex[id];},
 		getPerson: function(id){return personIndex[id];},
 		getAllOrganizations: function(){return organizations;},
-		getAllPersons: function(){return persons;}
+		getAllPersons: function(){return persons;},
+		getPersonTypeColumns: function(){return personTypeColumns;},
+		getOrgTypeColumns: function(){return orgTypeColumns;}
 	};
 });
