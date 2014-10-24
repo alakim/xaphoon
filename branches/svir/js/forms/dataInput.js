@@ -11,6 +11,7 @@
 						})
 					)
 				),
+				div({style:"clear:both;"}),
 				div({"class":"editPnl"})
 			);
 		}},
@@ -64,7 +65,8 @@
 					),
 					input({type:"button", "data-bind":"click:submitData", value:"Ввод"}),
 					span({"class":"savingIcon", style:"display:none"}, "Идет сохранение...")
-				)
+				),
+				div(input({type:"button", value:"Добавить сотрудника", "data-bind":"click:addPerson"}))
 			):null;
 		}}
 	};
@@ -154,6 +156,9 @@
 						viewEditPanel();
 					});
 				});
+			},
+			addPerson: function(){var _=this;
+				alert(1);
 			}
 		});
 	}

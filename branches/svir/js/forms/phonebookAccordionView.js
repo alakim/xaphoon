@@ -68,6 +68,7 @@ define(["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util
 		return res;
 	}
 	
+	// Разворачивает дерево до указанной организации
 	function expandTree(orgID){
 		$(".orgPanel").each(function(i, pnl){pnl=$(pnl);
 			if(pnl.attr("orgID")==orgID){
