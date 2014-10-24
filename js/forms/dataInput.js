@@ -64,8 +64,9 @@
 							util.validMsg("$address")
 						))
 					),
-					input({type:"button", "data-bind":"click:submitData", value:"Ввод"}),
-					span({"class":"savingIcon", style:"display:none"}, "Идет сохранение...")
+					input({type:"button", "data-bind":"click:submitData", value:"Сохранить"}),
+					input({type:"button", "data-bind":"click:deletePerson,visible:existingRow", value:"Удалить", style:"margin:0 0 0 10px;"}),
+					span({"class":"savingIcon", style:"display:none"}, img({src:"images/wait.gif", style:"margin:0 0 0 10px;"}))
 				)
 			):null;
 		}}
@@ -116,7 +117,7 @@
 
 	function PersonModel(){var _=this;
 		$.extend(_, {
-			id:null,
+			id:ko.observable(),
 			$fio:ko.observable("").extend({required:"Укажите ФИО"}),
 			$post:ko.observable("").extend({required:"Укажите должность"}),
 			$inPhone:ko.observable(""), //.extend({required:"Укажите внутренний телефон"}),
@@ -129,8 +130,9 @@
 		});
 		
 		$.extend(_, {
+			existingRow: ko.computed(function(){return _.id()!=null;}, _),
 			openDialog: function(person){var _=this;
-				_.id = person?person.id:null;
+				_.id(person?person.id:null);
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
 						var val = person?person[mapping.getJsonAttr(k)]:"";
@@ -138,9 +140,22 @@
 					}
 				}
 			},
+			deletePerson:function(){var _=this;
+				if(!confirm("Удалить эту запись?")) return;
+				$.post("ws/delPerson.php", {id:_.id(), ticket:ticket}, function(resp){resp = JSON.parse(resp);
+					if(resp.error){
+						alert(errors.code[resp.error]);
+						return;
+					}
+					$(".personDialog").hide();
+					db.refresh(function(){
+						viewEditPanel();
+					});
+				});
+			},
 			submitData: function(){var _=this;
 				if(!validation.validate(_)) return;
-				var res = {id:_.id, ticket:ticket};
+				var res = {id:_.id(), ticket:ticket};
 				res.orgID = $("#out .selOrg").val();
 				for(var k in _){
 					if(k.slice(0,1)=="$"){
@@ -149,9 +164,8 @@
 						res[attNm] = val==null?"":val;
 					}
 				}
-				//console.log(res);
 				$("#out .savingIcon").show();
-				$.post(_.id?"ws/savePerson.php":"ws/addPerson.php", res, function(resp){resp = JSON.parse(resp);
+				$.post(_.id()?"ws/savePerson.php":"ws/addPerson.php", res, function(resp){resp = JSON.parse(resp);
 					$("#out .savingIcon").hide();
 					if(resp.error){
 						alert(errors.code[resp.error]);
@@ -166,11 +180,6 @@
 		});
 	}
 	
-	//function addPerson(){
-	//	model.openDialog();
-	//	$(".personDialog").show();
-	//}
-	
 	return {
 		view: function(){
 			pnl = $("#out");
@@ -179,7 +188,6 @@
 			db.init(function(){
 				$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){resp = JSON.parse(resp);
 					pnl.html(templates.main(resp));
-					//pnl.find(".btAddPerson").click(addPerson);
 					viewEditPanel();
 					$("#out .selOrg").change(function(){
 						$("#out .editPnl").html("");
