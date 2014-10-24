@@ -87,6 +87,34 @@ class XmlPhonebookSingleDB{
 		$this->saveDocument();
 		echo('{"success":true}');
 	}
+	
+	// создает новый уникальный идентификатор
+	function getNewID(){
+		$counter = 1;
+		$id = "i".$counter;
+		$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
+		while($nodes->length>0){
+			$counter = $counter+1;
+			$id = "i".$counter;
+			$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
+		}
+		return $id;
+	}
+	
+	// добавляет данные сотрудника
+	function addPerson($orgID, $data){
+		$orgNode = $this->xpath->query("//organization[@id='".$orgID."'][1]")->item(0);
+		$node = $this->dbDoc->createElement("person");
+		$orgNode->appendChild($node);
+		foreach($data as $key => $val){
+			$node->setAttribute($key, $val);
+		}
+		$nID = $this->getNewID(1);
+		$node->setAttribute("id", $nID);
+		
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
 }
 
 

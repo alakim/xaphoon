@@ -127,7 +127,7 @@
 		level = level || 0;
 		var res = [];
 		for(var k in model){
-			if(model[k].validationMessage){
+			if(model[k] && model[k].validationMessage){
 				var msg = model[k].validationMessage();
 				if(msg.length) res.push(msg);
 			}

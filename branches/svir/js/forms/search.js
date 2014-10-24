@@ -52,11 +52,15 @@
 						div({"class":"title"}, itm.fio || itm.name),
 						div({"class":"properties"},
 							itm.parent?div(
-								span({style:"font-weight:bold;"}, "Организация "),
+								span({style:"font-weight:bold;"},
+									itm.xmltype=="person"?"Организация "
+										:itm.xmltype=="organization"?"Вышестоящая организация "
+										:null
+								),
 								span({"class":"link orglink", orgID:itm.parent.id, title:"Показать организацию"}, itm.parent.name)
 							):null,
 							apply(itm, function(v, k){
-								if(k=="xmltype" || k=="xmlchildren" || k=="name" || k=="fio" || k=="parent") return;
+								if(k=="xmltype" || k=="xmlchildren" || k=="name" || k=="fio" || k=="parent" || k=="id") return;
 								return div(
 									span({style:"font-weight:bold;"}, columns[k]?columns[k].name:k),
 									" ", util.formatValue(v)
