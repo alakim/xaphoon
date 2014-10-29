@@ -20,6 +20,8 @@
 			var org = db.getOrganization(orgID);
 			return org?div(
 				h2(org.name),
+				p({"class":"link orgEditLink"}, "Редактировать данные организации"),
+				h3("Сотрудники"),
 				div({"class":"personList", style:"float:left;"},
 					apply(org.xmlchildren, function(el){
 						return el.xmltype=="person"?div({"class":"link personEditLink", prsID:el.id}, el.fio):null;
@@ -67,6 +69,32 @@
 					input({type:"button", "data-bind":"click:submitData", value:"Сохранить"}),
 					input({type:"button", "data-bind":"click:deletePerson,visible:existingRow", value:"Удалить", style:"margin:0 0 0 10px;"}),
 					span({"class":"savingIcon", style:"display:none"}, img({src:"images/wait.gif", style:"margin:0 0 0 10px;"}))
+				),
+				div({"class":"orgDialog", style:"margin-left:300px; display:none;"},
+					table({border:0, cellpadding:3, cellspacing:0},
+						tr(td("Наименование"),td(
+							input({type:"text", "data-bind":"value:$name"}),
+							util.validMsg("$name")
+						)),
+						tr(td("Рабочий телефон"),td(
+							input({type:"text", "data-bind":"value:$workPhone"}),
+							util.validMsg("$workPhone")
+						)),
+						tr(td("Факс"),td(
+							input({type:"text", "data-bind":"value:$fax"}),
+							util.validMsg("$fax")
+						)),
+						tr(td("Электронный адрес"),td(
+							input({type:"text", "data-bind":"value:$email"}),
+							util.validMsg("$email")
+						)),
+						tr(td("Почтовый адрес"),td(
+							input({type:"text", "data-bind":"value:$address"}),
+							util.validMsg("$address")
+						))
+					),
+					input({type:"button", "data-bind":"click:submitData", value:"Сохранить"}),
+					span({"class":"savingIcon", style:"display:none"}, img({src:"images/wait.gif", style:"margin:0 0 0 10px;"}))
 				)
 			):null;
 		}}
@@ -77,25 +105,28 @@
 	function viewEditPanel(){
 		var orgID = $("#out .selOrg").val();
 		$("#out .editPnl").html(templates.editPanel(orgID));
-		var model = new PersonModel();
+		var persModel = new PersonModel();
+		var orgModel = new OrganizationModel();
+		$("#out .editPnl .orgEditLink").click(function(){
+			orgModel.openDialog(db.getOrganization(orgID));
+		});
 		$("#out .editPnl .personEditLink").click(function(){
 			var prsID = $(this).attr("prsID");
-			var person = db.getPerson(prsID);
-			model.openDialog(person);
-			$(".personDialog").show();
+			persModel.openDialog(db.getPerson(prsID));
 		});
 		$("#out .btAddPerson").click(function(){
-			model.openDialog();
-			$(".personDialog").show();
+			persModel.openDialog();
 		});
 
 		
-		ko.applyBindings(model, pnl.find(".personDialog")[0]);
+		ko.applyBindings(persModel, pnl.find(".personDialog")[0]);
+		ko.applyBindings(orgModel, pnl.find(".orgDialog")[0]);
 	}
 	
 	var mapping = (function(){
 		var map2Json = {
 			$fio:"fio",
+			$name:"name",
 			$post:"dolzh",
 			$inPhone:"vnutTel",
 			$workPhone:"rabTel",
@@ -115,6 +146,55 @@
 		};
 	})();
 
+	function OrganizationModel(){var _=this;
+		$.extend(_, {
+			id:ko.observable(),
+			$name:ko.observable("").extend({required:"Укажите название организации"}),
+			$workPhone:ko.observable(""), //.extend({required:"Укажите рабочий телефон"}),
+			$fax:ko.observable(""), //.extend({required:"Укажите факс"}),
+			$email:ko.observable(""),//.extend({requiredEMail:"Укажите электронный адрес"}),
+			$address:ko.observable("")//.extend({required:"Укажите почтовый адрес"})
+		});
+		$.extend(_, {
+			openDialog: function(org){var _=this;
+				_.id(org?org.id:null);
+				for(var k in _){
+					if(k.slice(0,1)=="$"){
+						var val = org?org[mapping.getJsonAttr(k)]:"";
+						_[k](val);
+					}
+				}
+				$(".personDialog").hide();
+				$(".orgDialog").show();
+			},
+			submitData: function(){var _=this;
+				if(!validation.validate(_)) return;
+				var res = {id:_.id(), ticket:ticket};
+				res.orgID = $("#out .selOrg").val();
+				for(var k in _){
+					if(k.slice(0,1)=="$"){
+						var attNm = mapping.getJsonAttr(k);
+						var val = _[k]();
+						res[attNm] = val==null?"":val;
+					}
+				}
+				$("#out .savingIcon").show();
+				$.post("ws/saveOrg.php", res, function(resp){resp = JSON.parse(resp);
+					$("#out .savingIcon").hide();
+					if(resp.error){
+						alert(errors.code[resp.error]);
+						return;
+					}
+					$(".orgDialog").hide();
+					db.refresh(function(){
+						viewEditPanel();
+					});
+				});
+			}
+
+		});
+	}
+	
 	function PersonModel(){var _=this;
 		$.extend(_, {
 			id:ko.observable(),
@@ -139,6 +219,8 @@
 						_[k](val);
 					}
 				}
+				$(".orgDialog").hide();
+				$(".personDialog").show();
 			},
 			deletePerson:function(){var _=this;
 				if(!confirm("Удалить эту запись?")) return;
