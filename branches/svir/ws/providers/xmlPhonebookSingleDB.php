@@ -124,6 +124,16 @@ class XmlPhonebookSingleDB{
 		$this->saveDocument();
 		echo('{"success":true}');
 	}
+	
+	// сохраняет данные организации
+	function saveOrganization($id, $data){
+		$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
+		foreach($data as $key => $val){
+			$node->setAttribute($key, $val);
+		}
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
 }
 
 
