@@ -1,9 +1,11 @@
 ﻿define(["jquery", "html", "knockout", 
 	"forms/authorization",
-	"forms/songs"
+	"forms/songs",
+	"forms/sessions"
 ], function($, $H, ko, 
 	authorization,
-	songs
+	songs,
+	sessions
 ){
 
 	function template(permissions){with($H){
@@ -11,6 +13,7 @@
 		return div(
 			ul({"class":"menu"},
 				usr.ticket?li({"data-bind":"click:showSongs"}, "Песни"):null,
+				usr.ticket?li({"data-bind":"click:showSessions"}, "Сессии"):null,
 				usr.ticket&&permissions.edit?li({"data-bind":"click:edit"}, "Редактировать"):null,
 				usr.ticket?li({"data-bind":"click:logoff"}, usr.name+" [Выйти]")
 					:li({"data-bind":"click:authorization"}, "Авторизация")
@@ -22,6 +25,9 @@
 		$.extend(_, {
 			showSongs: function(){
 				songs.view($(".mainPanel"));
+			},
+			showSessions: function(){
+				sessions.view($(".mainPanel"));
 			},
 			edit: function(){
 				alert("Edit Mode!");
