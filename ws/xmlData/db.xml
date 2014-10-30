@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xaphoonDB>
+	<songs>
+		<song id="SevenSpans" name="Семь пядей"/>
+		<song id="Bologoe" name="Бологое"/>
+		<song id="NotAll" name="Не всё"/>
+	</songs>
+</xaphoonDB>
