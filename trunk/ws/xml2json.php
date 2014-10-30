@@ -22,19 +22,26 @@ class Xml2Json{
 		self::writeXElement($outFile, $el);
 	}
 
-	static function writeXElement($outFile, $xEl){
+	static function writeXElement($outFile, $xEl, $withType=true){
 		$type = $xEl->tagName;
-		fwrite($outFile, '{"xmltype":"'.$type.'"');
+		fwrite($outFile, '{');
+		$first = true;
+		if($withType) {
+			fwrite($outFile, '"xmlt":"'.$type.'"');
+			$first = false;
+		}
 		if($xEl->hasAttributes()){
 			$attrs = $xEl->attributes;
 			foreach($attrs as $a){
 				$aNm = $a->nodeName;
 				$aVal = self::prepareValue($a->nodeValue);
-				fwrite($outFile, ',"'.$aNm.'":"'.$aVal.'"');
+				if($first) $first = false; else fwrite($outFile, ',');
+				fwrite($outFile, '"'.$aNm.'":"'.$aVal.'"');
 			}
 		}
 		if($xEl->hasChildNodes()){
-			fwrite($outFile, ',"xmlchildren":[');
+			if($first) $first = false; else fwrite($outFile, ',');
+			fwrite($outFile, '"xmlc":[');
 			$children = $xEl->childNodes;
 			$firstEl = true;
 			foreach($children as $chld){

@@ -27,7 +27,7 @@ class XmlDB{
 			if($first)$first = false; else fwrite($outFile, ",");
 			$orgID = $song->getAttribute('id');
 			fwrite($outFile, '"'.$orgID.'":');
-			Xml2Json::writeXElement($outFile, $song);
+			Xml2Json::writeXElement($outFile, $song, false);
 		}
 	}
 
