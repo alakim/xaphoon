@@ -17,6 +17,6 @@
 requirejs(["jquery", "html", "db", "forms/mainMenu", "forms/songs"], function($, $H, db, mainMenu, songs) {
 	db.init(function(){
 		mainMenu.view($(".mainMenu"));
-		songs.view($(".mainPanel"));
+		//songs.view($(".mainPanel"));
 	});
 });
