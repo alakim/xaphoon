@@ -22,6 +22,9 @@
 			localDB.data = null;
 			this.init(callback);
 		},
+		getSong: function(id){
+			return localDB.data.songs[id];
+		},
 		getSongs: function(){
 			return localDB.data.songs;
 		}

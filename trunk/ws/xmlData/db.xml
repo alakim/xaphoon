@@ -4,5 +4,12 @@
 		<song id="SevenSpans" name="Семь пядей"/>
 		<song id="Bologoe" name="Бологое"/>
 		<song id="NotAll" name="Не всё"/>
+		<song id="skipper" name="Шкипер">
+			<record date="2014-06-22" description="Запись с репетиции" url="https://www.dropbox.com/s/jtoi0je0vfrnfm7/Skipper_20131225.MP3?dl=1"/>
+		</song>
 	</songs>
+	<records>
+		<session date="2014-06-22">
+		</session>
+	</records>
 </xaphoonDB>
