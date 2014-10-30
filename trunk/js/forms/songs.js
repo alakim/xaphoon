@@ -12,6 +12,7 @@
 	
 	return {
 		view: function(pnl){
+			pnl = pnl || $(".mainPanel");
 			var songs = db.getSongs();
 			pnl.html(template(songs));
 		}

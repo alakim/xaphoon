@@ -5,7 +5,7 @@ require('xmlusersdb.php');
 require('xmlUserSessions.php');
 
 //require('xmlphonebookdb.php');
-//require('xmlPhonebookSingleDB.php');
+require('xmlDB.php');
 
 class ProviderFactory{
 	// static function getDBTypes(){
@@ -27,10 +27,10 @@ class ProviderFactory{
 		return new XmlUsersDB();
 	}
 	
-	// static function getPhonebook(){
-	// 	// return new XmlPhonebookDB();
-	// 	return new XmlPhonebookSingleDB();
-	// }
+	static function getDB(){
+		// return new XmlPhonebookDB();
+		return new XmlDB();
+	}
 	
 	// static function getTable($tblRef){
 	// 	$provName = $tblRef['srcType'];

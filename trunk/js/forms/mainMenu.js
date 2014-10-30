@@ -1,4 +1,10 @@
-﻿define(["jquery", "html", "knockout", "forms/authorization"], function($, $H, ko, authorization){
+﻿define(["jquery", "html", "knockout", 
+	"forms/authorization",
+	"forms/songs"
+], function($, $H, ko, 
+	authorization,
+	songs
+){
 
 	function template(){with($H){
 		var usr = $USER;
@@ -14,8 +20,7 @@
 	function Model(data, pnl){var _=this;
 		$.extend(_, {
 			showSongs: function(){
-				//users.view($("#out"));
-				alert("Songs are viewed!");
+				songs.view($(".mainPanel"));
 			},
 			authorization: function(){
 				authorization.view($(".mainPanel"));

@@ -127,3 +127,13 @@ footer{
 	padding:25px;
 	border-top:1px solid #ccc;
 }
+
+.mainMenu{
+	padding: 0 0 5px 0;
+	margin: 5px 0 1px 0;
+	border-bottom:1px solid #ccc;
+}
+.mainPanel{
+	padding: 5px 0 0 0;
+	border-top:1px solid #ccc;
+}

@@ -1,7 +1,7 @@
 <?php
 session_start(); 
 
-require('util.php');
+//require('util.php');
 require('providers/factory.php');
 
 $usr = $_POST["login"];
