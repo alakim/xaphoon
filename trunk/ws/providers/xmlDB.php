@@ -25,9 +25,18 @@ class XmlDB{
 		$first = true;
 		foreach($songs as $song){
 			if($first)$first = false; else fwrite($outFile, ",");
-			$orgID = $song->getAttribute('id');
-			fwrite($outFile, '"'.$orgID.'":');
+			$id = $song->getAttribute('id');
+			fwrite($outFile, '"'.$id.'":');
 			Xml2Json::writeXElement($outFile, $song, false);
+		}
+	}
+
+	function writeSessions($outFile){
+		$coll = $this->xpath->query('/xaphoonDB/sessions/session');
+		$first = true;
+		foreach($coll as $itm){
+			if($first)$first = false; else fwrite($outFile, ",");
+			Xml2Json::writeXElement($outFile, $itm, false);
 		}
 	}
 
@@ -38,9 +47,16 @@ class XmlDB{
 		if(!file_exists(self::$cachedFile) || $clearCache){
 			$file = fopen(self::$cachedFile, 'w');
 			fwrite($file, "{");
+			
 			fwrite($file, '"songs":{');
 			$this->writeSongs($file);
-			fwrite($file, '}}');
+			fwrite($file, '}');
+			
+			fwrite($file, ',"sessions":[');
+			$this->writeSessions($file);
+			fwrite($file, ']');
+			
+			fwrite($file, '}');
 			fclose($file);
 		}
 
