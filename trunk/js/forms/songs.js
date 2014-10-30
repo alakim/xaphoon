@@ -1,18 +1,18 @@
-﻿define(["jquery", "html", "knockout", "db"], function($, $H, ko, db){
+﻿define(["jquery", "html", "knockout", "db", "forms/recordView"], function($, $H, ko, db, recordView){
 
 	var templates = {
 		main: function(songs){with($H){
 			return div(
 				table({border:0},
 					tr(
-						td({width:250},
+						td({width:250, valign:"top"},
 							ul(
 								apply(songs, function(sng){
 									return li({"class":"songLink", sID:sng.id}, sng.name)
 								})
 							)
 						),
-						td(div({id:"songPnl"}))
+						td({valign:"top"}, div({id:"songPnl"}))
 					)
 				)
 			);
@@ -24,15 +24,9 @@
 				h3("Записи"),
 				apply(records, function(itm){
 					return div(
-							h4(itm.session.date, " ", itm.session.title),
-							div({style:"margin-left:20px;"},
-								itm.record.online=="true"?audio({controls:"controls"},
-									source({src:itm.record.url, type:"audio/mp3"})
-								):null,
-								div(itm.record.description),
-								div(a({href:itm.record.url}, "Download"))
-							)
-						);
+						h4(itm.session.date, " ", itm.session.title),
+						recordView.template(itm.record)
+					);
 				})
 			);
 		}}

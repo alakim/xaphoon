@@ -2,8 +2,18 @@
 	var localDB = {};
 	var changes = {};
 	
+	var getNewID = (function(){
+		var counter = 0;
+		return function(){
+			counter++;
+			return "itm"+counter;
+		};
+	})();
+	
 	function indexDB(){
 		localDB.records = {};
+		localDB.sessions = [];
+		localDB.sessionIdx = [];
 		function addRecord(rec, session){
 			var sID = rec.song;
 			if(!localDB.records[sID]) localDB.records[sID] = [];
@@ -13,6 +23,9 @@
 			});
 		}
 		$.each(localDB.data.sessions, function(i, sess){
+			sess.id = getNewID();
+			localDB.sessions.push(sess);
+			localDB.sessionIdx[sess.id] = sess;
 			$.each(sess.xmlc, function(i, el){
 				if(el.xmlt=="record") addRecord(el, sess);
 			});
@@ -53,6 +66,12 @@
 		},
 		getRecords: function(songID){
 			return localDB.records[songID];
+		},
+		getSessions: function(){
+			return localDB.sessions;
+		},
+		getSession: function(id){
+			return localDB.sessionIdx[id];
 		}
 	};
 });
