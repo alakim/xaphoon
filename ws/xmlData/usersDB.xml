@@ -8,6 +8,9 @@
 			</access>
 		</group>
 		<group id="editors" name="Редакторы">
+			<access>
+				<edit/>
+			</access>
 		</group>
 	</groups>
 	<users>
@@ -17,8 +20,7 @@
 		</user>
 		<user id="iii" name="Иванов И.И." bgnDate="01.01.2013" endDate="31.12.2013" password="36347412c7d30ae6fde3742bbc4f21b9">
 			<access>
-				<organization id="test"/>
-				<!--organization id="ivc_mosstroy"/-->
+				<edit/>
 			</access>
 		</user>
 		<user id="ppp" name="Петров П.П." bgnDate="01.01.2013" endDate="31.12.2013" password="f27f6f1c7c5cbf4e3e192e0a47b85300">

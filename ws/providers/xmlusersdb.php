@@ -60,14 +60,11 @@ class XmlUsersDB{
 		function writeAccess($acc){
 			if($acc->tagName=="users")
 				echo('"users"');
-			
-			else if($acc->tagName=="verification")
+			else if($acc->tagName=="edit")
+				echo('"edit"');
+			if($acc->tagName=="verification")
 				echo('"verification"');
 			
-			else if($acc->tagName=="organization"){
-				$orgID = $acc->getAttribute('id');
-				echo('{"organization":"'.$orgID.'"}');
-			}
 		}
 		
 		echo("[");
