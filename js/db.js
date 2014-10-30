@@ -51,12 +51,15 @@
 	
 	return {
 		init: function(callback){
+			$(".mainPanel").html($H.img({src:"images/wait.gif"}));
 			if(localDB.data){
 				callback();
 				return;
 			}
 			$.post("ws/phonebook.php", {}, function(resp){
 				var data = JSON.parse(resp);
+				$(".mainPanel").html("");
+				//console.log(data);
 				localDB.data = data;
 				indexDB();
 				callback();

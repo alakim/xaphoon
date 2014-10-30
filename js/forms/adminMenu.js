@@ -5,6 +5,7 @@
 	"forms/users", 
 	"forms/dataInput", 
 	"forms/table_input", 
+	"forms/colTable_input", 
 	"forms/verification"
 ], function(
 	$, $H, ko, 
@@ -13,6 +14,7 @@
 	users,
 	dataInput,
 	tableInput,
+	colTableInput,
 	verification
 ){
 
@@ -24,6 +26,7 @@
 				usr.ticket && permissions.users?li({"data-bind":"click:showUsers"}, "Пользователи"):null,
 				usr.ticket && permissions.verification?li({"data-bind":"click:verify"}, "Верификация данных"):null,
 				usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
+				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
 				usr.ticket?li({"data-bind":"click:dataInput"}, "Ввод данных"):null,
 				usr.ticket?li({"data-bind":"click:logoff"}, usr.name+" [Выйти]")
 					:li({"data-bind":"click:authorization"}, "Авторизация")
@@ -47,6 +50,9 @@
 			},
 			tableInput: function(){
 				tableInput.view();
+			},
+			colTableInput: function(){
+				colTableInput.view();
 			},
 			dataInput: function(){
 				dataInput.view();
