@@ -138,4 +138,7 @@ var Html = {
 	defineTags(["div", "a", "p", "span", "ul", "ol", "li", "table", "tbody", "thead", "tr", "input", "label", "textarea", "pre", "select", "option", "h1", "h2", "h3", "h4", "h5", "h6", "button", "form"]);
 	defineSelfClosingTags(["img", "hr", "br", "iframe"]);
 	defineNotEmptyTags(["th", "td"]);
+	
+	// HTML5
+	defineTags(["audio", "source"]);
 })();
