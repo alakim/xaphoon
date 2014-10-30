@@ -4,12 +4,14 @@
 		<song id="SevenSpans" name="Семь пядей"/>
 		<song id="Bologoe" name="Бологое"/>
 		<song id="NotAll" name="Не всё"/>
-		<song id="skipper" name="Шкипер">
-			<record date="2014-06-22" description="Запись с репетиции" url="https://www.dropbox.com/s/jtoi0je0vfrnfm7/Skipper_20131225.MP3?dl=1"/>
-		</song>
+		<song id="skipper" name="Шкипер"/>
 	</songs>
-	<records>
-		<session date="2014-06-22">
+	<sessions>
+		<session date="2014-06-22" title="Репетиция в Перово">
+			<record song="skipper" description="Первая проба" online="false" url="https://www.dropbox.com/s/jtoi0je0vfrnfm7/Skipper_20131225.MP3?dl=0"/>
 		</session>
-	</records>
+		<session date="2014-06-27" title="Репетиция на Городке">
+			<record song="skipper" description="Новый вариант" online="true" url="https://www.dropbox.com/s/j44w6d76b35s7pl/%D0%A8%D0%BA%D0%B8%D0%BF%D0%B5%D1%80_src20131215.mp3?dl=1"/>
+		</session>
+	</sessions>
 </xaphoonDB>

@@ -18,18 +18,21 @@
 			);
 		}},
 		song: function(song){with($H){
+			var records = db.getRecords(song.id);
 			return div(
 				h2(song.name),
-				apply(song.xmlc, function(itm){
-					return itm.xmlt=="record"?div(
-							audio({controls:"controls"},
-								source({src:itm.url, type:"audio/mp3"})
-							),
-							div("Date: ", itm.date),
-							div(itm.description),
-							div("Source: ", a({href:itm.url}, itm.url))
-						)
-						:null;
+				h3("Записи"),
+				apply(records, function(itm){
+					return div(
+							h4(itm.session.date, " ", itm.session.title),
+							div({style:"margin-left:20px;"},
+								itm.record.online=="true"?audio({controls:"controls"},
+									source({src:itm.record.url, type:"audio/mp3"})
+								):null,
+								div(itm.record.description),
+								div(a({href:itm.record.url}, "Download"))
+							)
+						);
 				})
 			);
 		}}
