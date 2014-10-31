@@ -13,7 +13,8 @@
 										ssn.date, ": ", ssn.title
 									);
 								})
-							)
+							),
+							$STATE.editMode?div({style:"margin:10px 0 10px 20px;"}, input({type:"button", value:"Добавить сессию", "class":"btAddSession"})):null
 						),
 						td({valign:"top"},
 							div({id:"ssnPnl"})
@@ -27,7 +28,16 @@
 				h2(ssn.date, ": ", ssn.title),
 				apply(ssn.xmlc, function(itm){
 					return itm.xmlt=="record"?recordView.template(itm, true):null;
-				})
+				}),
+				$STATE.editMode?div({style:"margin:10px 0 10px 20px;"}, input({type:"button", value:"Редактировать сессию", "class":"btEditSession"})):null
+			);
+		}},
+		sessionDialog: function(){with($H){
+			return div(
+				table(
+					tr(td("Дата"), td(input({type:"text", "data-bind":"$date"}))),
+					tr(td("Заголовок"), td(input({type:"text", "data-bind":"$title"})))
+				)
 			);
 		}}
 	};
@@ -35,6 +45,14 @@
 	function viewSession(id){
 		var ssn = db.getSession(id);
 		$("#ssnPnl").html(templates.session(ssn));
+		$("#ssnPnl .btEditSession").click(editSession);
+	}
+	
+	function addSession(){
+		$("#ssnPnl").html(templates.sessionDialog());
+	}
+	function editSession(){
+		$("#ssnPnl").html(templates.sessionDialog());
 	}
 	
 	return {
@@ -46,6 +64,7 @@
 				var sID = $(this).attr("sID");
 				viewSession(sID);
 			});
+			pnl.find(".btAddSession").click(addSession);
 		}
 	};
 });

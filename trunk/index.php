@@ -17,6 +17,10 @@
 			name: "<?=$usrName?>"
 		};
 		if(!$USER.ticket || !$USER.ticket.length) $USER.ticket = null;
+		$STATE = {
+			form:null,
+			editMode:false
+		};
 	</script>
 </head>
 <body>

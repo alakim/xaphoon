@@ -24,18 +24,28 @@
 	function Model(data, pnl){var _=this;
 		$.extend(_, {
 			showSongs: function(){
+				$STATE.form = "songs";
 				songs.view($(".mainPanel"));
 			},
 			showSessions: function(){
+				$STATE.form = "sessions";
 				sessions.view($(".mainPanel"));
 			},
 			edit: function(){
-				alert("Edit Mode!");
+				$STATE.editMode = true;
+				switch($STATE.form){
+					case "songs": songs.view($(".mainPanel"));break;
+					case "sessions": sessions.view($(".mainPanel"));break;
+					default: break;
+				}
 			},
 			authorization: function(){
 				authorization.view($(".mainPanel"));
 			},
 			logoff: function(){
+				$STATE.form = null;
+				$STATE.editMode = false;
+				
 				authorization.logoff();
 			}
 		});
