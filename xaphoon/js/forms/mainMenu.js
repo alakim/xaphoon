@@ -57,7 +57,7 @@
 			pnl = pnl || $(".mainMenu");
 			
 			
-			$.post("ws/userPermissions.php", {ticket:$USER.ticket}, function(resp){
+			$.post("xaphoon/ws/userPermissions.php", {ticket:$USER.ticket}, function(resp){
 				var permissions = {};
 				$.each(JSON.parse(resp), function(i, el){
 					if(typeof(el)=="string") permissions[el]=true;

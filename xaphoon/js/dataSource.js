@@ -7,7 +7,7 @@ define(["jspath", "util"], function($JP, util){
 	return {
 		load: function(file, arrMode, onload){
 			var log = util.log("loading " + file + " ...");
-			$.post("ws/load.php", {path:file}, function(resp){
+			$.post("xaphoon/ws/load.php", {path:file}, function(resp){
 				try{
 					resp = $.parseJSON(resp);
 				}
@@ -36,14 +36,14 @@ define(["jspath", "util"], function($JP, util){
 			var log = util.log("saving "+path+" ...");
 			var json = JSON.stringify(data);
 			json = json.replace(/\s*\t+\s*/g, " ");
-			$.post("ws/save.php", {path:path, data:json}, function(res){
+			$.post("xaphoon/ws/save.php", {path:path, data:json}, function(res){
 				util.log("OK", log);
 				onsave();
 			});
 		},
 		backupData: function(onbackup){
 			var backupUrl = "http://www.back.ru/sss/s.zip";
-			$.post("ws/archive.php", {n:"dataBackup", d:"../data"}, function(res){
+			$.post("xaphoon/ws/archive.php", {n:"dataBackup", d:"../data"}, function(res){
 				res = $.parseJSON(res);
 				if(res.error){
 					alert(res.error);

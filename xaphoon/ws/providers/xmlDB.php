@@ -9,7 +9,7 @@ include 'xml2json.php';
 
 class XmlDB{
 	
-	static $cachedFile = '../cache/db';
+	static $cachedFile = '../../cache/db';
 	static $docPath = 'xmlData/db.xml';
 	
 	function __construct(){

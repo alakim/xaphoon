@@ -37,7 +37,7 @@
 				if(!validation.validate(_)) return;
 				var d = util.getModelData(this);
 				
-				$.post("ws/logon.php", {login:d.login, password:d.password}, function(resp){
+				$.post("xaphoon/ws/logon.php", {login:d.login, password:d.password}, function(resp){
 					resp = JSON.parse(resp);
 					if(resp.error)
 						alert(errors.code[resp.error]);
@@ -69,7 +69,7 @@
 			return authorizedUser;
 		},
 		logoff: function(){
-			$.post("ws/logoff.php", {ticket:authorizedUser.ticket}, function(resp){
+			$.post("xaphoon/ws/logoff.php", {ticket:authorizedUser.ticket}, function(resp){
 				resp = JSON.parse(resp);
 				if(resp.error)
 					alert(errors.code[resp.error]);

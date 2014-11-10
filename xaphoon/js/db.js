@@ -47,7 +47,7 @@
 				callback();
 				return;
 			}
-			$.post("ws/db.php", {}, function(resp){
+			$.post("xaphoon/ws/db.php", {}, function(resp){
 				var data = JSON.parse(resp);
 				localDB.data = data;
 				indexDB();
