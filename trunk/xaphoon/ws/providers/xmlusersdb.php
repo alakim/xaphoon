@@ -13,7 +13,7 @@ class XmlUsersDB{
 		$db = $this->dbDoc;
 		if($db=='') return;
 		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->load('xmlData/'.$db);
+		$doc->load('../../data/'.$db);
 		$xp = new DOMXPath($doc);
 		
 		$users = $xp->query("//users/user[@id='$usrID']");
@@ -23,7 +23,7 @@ class XmlUsersDB{
 	
 	function writeSimpleUsersList(){
 		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->load('xmlData/usersDB.xml');
+		$doc->load('../../data/usersDB.xml');
 		$xp = new DOMXPath($doc);
 		$users = $xp->query("//users/user");
 		
@@ -40,7 +40,7 @@ class XmlUsersDB{
 		$db = $this->dbDoc;
 		if($db=='') return;
 		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->load('xmlData/'.$db);
+		$doc->load('../../data/'.$db);
 		$xp = new DOMXPath($doc);
 		
 		$users = $xp->query("//users/user[@id='$usrID']");
@@ -52,7 +52,7 @@ class XmlUsersDB{
 		$db = $this->dbDoc;
 		if($db=='') return;
 		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->load('xmlData/'.$db);
+		$doc->load('../../data/'.$db);
 		$xp = new DOMXPath($doc);
 		
 		$groups = $xp->query("//users/user[@id='$usrID']/member/@group");
