@@ -1,9 +1,16 @@
 <?php 
+include '../../config.php';
+
 class Util{
 	
 	static function conv($str){
-		return iconv("UTF-8", "windows-1251", $str);
+		global $CONFIG;
+		if($CONFIG["Utf2Win"])
+			return iconv("UTF-8", "windows-1251", $str);
+		else
+			return $str;
 	}
+	
 	
 	static function checkAccess($ticket, $catID){
 		$sessions = ProviderFactory::getSessions('xmlData/');
