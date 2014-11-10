@@ -10,7 +10,7 @@ include 'xml2json.php';
 class XmlDB{
 	
 	static $cachedFile = '../../cache/db';
-	static $docPath = 'xmlData/db.xml';
+	static $docPath = '../../data/db.xml';
 	
 	function __construct(){
 		$this->dbDoc = new DOMDocument('1.0', 'UTF-8');
