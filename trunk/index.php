@@ -8,9 +8,9 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>Xaphoon</title>
-	<link rel="stylesheet" href="reset.css"/>
-	<link rel="stylesheet" href="styles.css"/>
-	<script type="text/javascript" data-main="js/main" src="js/lib/require.js"></script>
+	<link rel="stylesheet" href="xaphoon/reset.css"/>
+	<link rel="stylesheet" href="xaphoon/styles.css"/>
+	<script type="text/javascript" data-main="xaphoon/js/main" src="xaphoon/js/lib/require.js"></script>
 	<script type="text/javascript">
 		$USER = {
 			ticket: "<?=$ticket?>",

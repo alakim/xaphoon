@@ -1,5 +1,5 @@
 ﻿requirejs.config({
-    baseUrl: "js",
+    baseUrl: "xaphoon/js",
     paths: {
 		jquery: "lib/jquery-1.11.0.min",
 		html:"lib/html",
