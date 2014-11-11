@@ -1,4 +1,4 @@
-﻿define(["knockout", "db"], function(ko, db){
+﻿define("validation", ["knockout", "db"], function(ko, db){
 	function lambda(expr){
 		expr = expr.split("|");
 		return new Function(expr[0], "return "+expr[1]);

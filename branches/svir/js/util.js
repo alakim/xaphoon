@@ -1,4 +1,4 @@
-﻿define(["jquery", "html"], function($, $H) {
+﻿define("util", ["jquery", "html"], function($, $H) {
 	function twoDigits(x){
 		return x<10?"0"+x:x;
 	}

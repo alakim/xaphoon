@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "util", "errors"], function($, $H, ko, util, errors){
+﻿define("forms/verification", ["jquery", "html", "knockout", "util", "errors"], function($, $H, ko, util, errors){
 
 	var templates = {
 		main: function(){with($H){

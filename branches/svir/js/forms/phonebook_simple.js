@@ -1,6 +1,6 @@
 ﻿// Отладочный просмотр XML-данных организаций
 
-define(["jquery", "html"], function($, $H){
+define("forms/phonebook_simple", ["jquery", "html"], function($, $H){
 	var templates = {
 		main: function(doc){with($H){
 			return div(

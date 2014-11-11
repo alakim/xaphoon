@@ -1,4 +1,4 @@
-﻿define([], function() {
+﻿define("errors", [], function() {
 	return {
 		code:{
 			errAuthorizationRequired:"Требуется авторизация",

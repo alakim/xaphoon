@@ -1,4 +1,4 @@
-﻿define(["jquery", "html"], function($, $H) {
+﻿define("jqext", ["jquery", "html"], function($, $H) {
 	/******** jQuery Extensions ********/
 	
 	$.fn.printVersion = function(){

@@ -1,4 +1,4 @@
-﻿define([
+﻿define("forms/colTable_input", [
 	"jquery", "html", "knockout",
 	"util", "validation", "errors",
 	"textLib", "db"

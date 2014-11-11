@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "util", "validation", "errors"], function($, $H, ko, util, validation, errors){
+﻿define("forms/users", ["jquery", "html", "knockout", "util", "validation", "errors"], function($, $H, ko, util, validation, errors){
 
 	function template(data){with($H){
 		//console.log(data);

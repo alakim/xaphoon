@@ -1,4 +1,4 @@
-﻿define(["jquery"], function($){
+﻿define("textLib", ["jquery"], function($){
 
 	function capitalize(str){ 
 		var res = [];

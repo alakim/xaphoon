@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "util", "validation", "errors"], function($, $H, ko, util, validation, errors){
+﻿define("forms/authorization", ["jquery", "html", "knockout", "util", "validation", "errors"], function($, $H, ko, util, validation, errors){
 
 	function template(){with($H){
 		return div({"class":"dialog", style:"width:300px;"},
