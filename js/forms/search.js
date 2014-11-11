@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "db", "util", "validation"], function($, $H, ko, db, util, validation){
+﻿define("forms/search", ["jquery", "html", "knockout", "db", "util", "validation"], function($, $H, ko, db, util, validation){
 	var templates = {
 		main: function(){with($H){
 			return div(

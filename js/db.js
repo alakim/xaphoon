@@ -1,4 +1,4 @@
-﻿define(["jspath", "dataSource", "util"], function($JP, dSrc, util){
+﻿define("db", ["jspath", "html", "dataSource", "util"], function($JP, $H, dSrc, util){
 	var localDB = {},
 		organizations = [],
 		persons = [],

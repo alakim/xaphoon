@@ -1,4 +1,4 @@
-﻿define([
+﻿define("forms/adminMenu", [
 	"jquery", "html", "knockout", 
 	"errors",
 	"forms/authorization", 

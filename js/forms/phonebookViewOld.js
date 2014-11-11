@@ -1,6 +1,6 @@
 ﻿// Отображение документа, экспортированного из Excel to ODS в виде иерархии по организациям
 
-define(["jquery", "html"], function($, $H){
+define("forms/phonebookViewOld", ["jquery", "html"], function($, $H){
 	var templates = {
 		main: function(doc){with($H){
 			return div(

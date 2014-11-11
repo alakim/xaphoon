@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "db", "util", "validation", "errors"], function($, $H, ko, db, util, validation, errors){
+﻿define("forms/dataInput", ["jquery", "html", "knockout", "db", "util", "validation", "errors"], function($, $H, ko, db, util, validation, errors){
 
 	var templates = {
 		main: function(permissions){with($H){

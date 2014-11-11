@@ -1,4 +1,4 @@
-define(["jspath", "util"], function($JP, util){
+define("dataSource", ["jspath", "util"], function($JP, util){
 	
 	var tooLargeFileSize = 150000;
 	

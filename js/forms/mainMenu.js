@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "knockout", "forms/phonebook_simple", "forms/search", "forms/phonebookAccordionView"], function($, $H, ko, phonebook, search, phonebookView){
+﻿define("forms/mainMenu", ["jquery", "html", "knockout", "forms/phonebook_simple", "forms/search", "forms/phonebookAccordionView"], function($, $H, ko, phonebook, search, phonebookView){
 
 	function template(){with($H){
 		return div(
