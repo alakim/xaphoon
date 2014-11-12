@@ -22,6 +22,7 @@
 <body>
 	<?php include 'header.php'; ?>
 	<nav class="mainMenu">
+		<img src="images/wait.gif"/>
 	</nav>
 	<div id="out">
 		
