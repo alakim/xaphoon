@@ -38,7 +38,8 @@ buildScripts(array(
 	'forms/dataInput.js',
 	'forms/table_input.js',
 	'forms/users.js',
-	'forms/verification.js'
+	'forms/verification.js',
+	'forms/myaccount.js'
 ), "main_admin.js");
 
 

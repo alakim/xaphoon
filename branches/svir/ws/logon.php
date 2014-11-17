@@ -32,6 +32,7 @@ if($userProvider->checkUser($usr, $psw)){
 	$nm = $userProvider->getUserName($usr);
 	$_SESSION["ticket"] = $ticket;
 	$_SESSION["usrName"] = $nm;
+	$_SESSION["usrID"] = $usr;
 	$sessionProvider->setSession($usr, $ticket);
 	echo("{\"ticket\":\"".$ticket."\",\"login\":\"".$usr."\",\"name\":\"".$nm."\"}");
 }

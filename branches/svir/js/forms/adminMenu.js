@@ -6,7 +6,8 @@
 	"forms/dataInput", 
 	"forms/table_input", 
 	"forms/colTable_input", 
-	"forms/verification"
+	"forms/verification",
+	"forms/myaccount"
 ], function(
 	$, $H, ko, 
 	errors,
@@ -15,7 +16,8 @@
 	dataInput,
 	tableInput,
 	colTableInput,
-	verification
+	verification,
+	myAccount
 ){
 
 	function template(permissions){with($H){
@@ -28,6 +30,7 @@
 				usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
 				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
 				usr.ticket?li({"data-bind":"click:dataInput"}, "Ввод данных"):null,
+				usr.ticket?li({"data-bind":"click:myAccount"}, "Мои данные"):null,
 				usr.ticket?li({"data-bind":"click:logoff"}, usr.name+" [Выйти]")
 					:li({"data-bind":"click:authorization"}, "Авторизация")
 			)
@@ -56,6 +59,9 @@
 			},
 			dataInput: function(){
 				dataInput.view();
+			},
+			myAccount: function(){
+				myAccount.view();
 			}
 		});
 	}
