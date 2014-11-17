@@ -2,6 +2,7 @@
 	session_start(); 
 	$ticket = $_SESSION["ticket"];
 	$usrName = $_SESSION["usrName"];
+	$usrID = $_SESSION["usrID"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,7 +16,8 @@
 	<script type="text/javascript">
 		$USER = {
 			ticket: "<?=$ticket?>",
-			name: "<?=$usrName?>"
+			name: "<?=$usrName?>",
+			login: "<?=$usrID?>"
 		};
 		if(!$USER.ticket || !$USER.ticket.length) $USER.ticket = null;
 	</script>

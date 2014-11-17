@@ -13,6 +13,7 @@ $sessionProvider = ProviderFactory::getSessions(null);
 $sessionProvider->closeSession($ticket);
 $_SESSION["ticket"] = '';
 $_SESSION["usrName"] = '';
+$_SESSION["usrID"] = '';
 
 echo("{}");
 

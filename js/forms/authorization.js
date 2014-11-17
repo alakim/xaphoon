@@ -44,6 +44,7 @@
 					else{
 						authorizedUser.ticket = resp.ticket;
 						authorizedUser.name = resp.name;
+						authorizedUser.login = d.login;
 						$USER = authorizedUser;
 						$("#out").html("");
 						require("forms/adminMenu").view();
