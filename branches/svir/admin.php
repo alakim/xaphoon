@@ -10,7 +10,8 @@
 	<title>Телефонный справочник</title>
 	<link rel="stylesheet" type="text/css" href="reset.css"/>
 	<link rel="stylesheet" type="text/css" href="styles.css"/>
-	<script type="text/javascript" data-main="js/admin" src="js/lib/require.js"></script>
+	<!-- main_admin || admin -->
+	<script type="text/javascript" data-main="js/main_admin" src="js/lib/require.js"></script>
 	<script type="text/javascript">
 		$USER = {
 			ticket: "<?=$ticket?>",
