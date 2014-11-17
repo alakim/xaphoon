@@ -21,7 +21,7 @@ class XmlUsersDB{
 		return $users->item(0)->getAttribute('password')==md5($password);
 	}
 	
-	function writeSimpleUsersList(){
+	function writeSimpleUsersList($fullMode){
 		$doc = new DOMDocument('1.0', 'UTF-8');
 		$doc->load('xmlData/usersDB.xml');
 		$xp = new DOMXPath($doc);
@@ -31,7 +31,13 @@ class XmlUsersDB{
 		foreach($users as $usr){
 			$id = Util::conv($usr->getAttribute('id'));
 			$nm = Util::conv($usr->getAttribute('name'));
-			echo("{\"login\":\"".$id."\",\"name\":\"".$nm."\"},");
+			echo("{\"login\":\"".$id."\",\"name\":\"".$nm."\"");
+			if($fullMode){
+				$org = $xp->query('access/organization/@id', $usr);
+				if($org->length>0)
+					echo(',"organization":"'.$org->item(0)->nodeValue.'"');
+			}
+			echo('},');
 		}
 		echo("null]}");
 	}
@@ -88,6 +94,47 @@ class XmlUsersDB{
 		}
 		
 		echo("]");
+	}
+	
+	
+	function saveUser($data){
+		$db = $this->dbDoc;
+		if($db=='') return;
+		
+		$doc = new DOMDocument('1.0', 'UTF-8');
+		$doc->load('xmlData/'.$db);
+		$xp = new DOMXPath($doc);
+		
+		$uColl = $xp->query("//users/user[@id='".$data['login']."']");
+		if($uColl->length>0){
+			$user = $uColl->item(0);
+			$user->setAttribute('name', $data['name']);
+			if(isset($data['password'])){
+				$user->setAttribute('password', md5($data['password']));
+			}
+			if(isset($data['organization'])){
+				$org = $xp->query('access/organization', $user);
+				if($org->length==0){
+					$acc = $xp->query('access', $user);
+					if($acc->length==0){
+						$a = $doc->createElement('access');
+						$user->appendChild($a);
+						$acc = $a;
+					}
+					else{
+						$acc = $acc->item(0);
+					}
+					$org = $doc->createElement('organization');
+					$acc->appendChild($org);
+				}
+				else{
+					$org = $org->item(0);
+				}
+				$org->setAttribute('id', $data['organization']);
+			}
+			
+			$doc->save('xmlData/'.$db) or die('Error saving '.self::$docPath);
+		}
 	}
 	
 	
