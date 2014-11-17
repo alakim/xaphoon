@@ -26,9 +26,14 @@
 		target.hasError = ko.observable();
 		target.validationMessage = ko.observable();
 
-		var path = typeof(options)=="string"?options:options.path;
-		
-		var coll = db.getBranch(path);
+		var coll;
+		if(options.coll){
+			coll = options.coll;
+		}
+		else{
+			var path = typeof(options)=="string"?options:options.path;
+			coll = db.getBranch(path);
+		}
 	 
 		function validate(newValue) {
 			var valid = (coll==null) || 
@@ -46,14 +51,16 @@
 	
 	ko.extenders.condition = function(target, options) {
 		var cond = typeof(options)=="string"?options:options.condition;
+		var model = options.model;
 		var overrideMessage = options.message || "Должно выполняться условие "+cond;
 		
 		cond = lambda(cond);
+		
 		target.hasError = ko.observable();
 		target.validationMessage = ko.observable();
 		
 		function validate(newValue) {
-			var valid = cond(newValue);
+			var valid = cond(newValue, model);
 			target.hasError(!valid);
 			target.validationMessage(valid ? "" : overrideMessage);
 		}
