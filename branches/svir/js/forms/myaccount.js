@@ -63,7 +63,6 @@
 		view: function(){
 			pnl = $("#out");
 			ticket = $USER.ticket;
-			console.log($USER);
 			
 			pnl.html(templates.main());
 			ko.applyBindings(new Model(), pnl.find("div")[0]);

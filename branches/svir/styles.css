@@ -113,12 +113,28 @@ div.dialog{
 #out h4{font-size:14px; padding-left:60px;}
 #out h5{font-size:12px; padding-left:80px;}
 #out h6{font-size:12px; padding-left:100px;}
+#out h1,h2,h3,h4,h5,h6{
+	font-family: Verdana, Arial, Sans-Serif;
+	font-weight:normal;
+}
 
 #out .orgSubPanel{
 	display:none;
-	margin: 0 0 5px 40px;
-	padding: 5px;
+	margin: 0 0 10px 20px;
+	padding: 5px 5px 5px 20px;
+	border-left: 5px solid #f4f4f4;
 	/*border:1px solid #ccc;*/
+}
+#out .pnlPrint{
+	margin: 0 0 10px 0;
+}
+#out .btPrint{
+	margin-top:5px;
+	background-color:#eee;
+	color:#222;
+	border:1px solid #ccc;
+	border-color: #fff #888 #888 #fff;
+	border-radius: 4px;
 }
 
 .orgTitle{
