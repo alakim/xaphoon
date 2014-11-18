@@ -4,7 +4,9 @@
 	$.fn.printVersion = function(){
 		var templates = {
 			button: function(){with($H){
-				return input({"class":"btPrint", type:"button", value:"Версия для печати"});
+				return div({"class":"pnlPrint"},
+					input({"class":"btPrint", type:"button", value:"Версия для печати"})
+				);
 			}},
 			window: function(content){with($H){
 				return tag("html", markup(
