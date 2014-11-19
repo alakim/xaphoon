@@ -11,36 +11,56 @@
 	var templates = {
 		main: function(){with($H){
 			return div(
-				textarea({id:"srcText", style:style({width:800, height:300})}),
-				div(input({type:"button", value:"Ввод", "class":"btProcess"})),
+				table(tr(
+					td({width:250},
+						textarea({id:"srcText", style:style({width:800, height:300})}),
+						div(input({type:"button", value:"Ввод", "class":"btProcess"}))
+					),
+					td(
+						templates.orgTree(db.getOrgTree())
+					)
+				)),
 				div({id:"resultPnl"})
+			);
+		}},
+		orgTree: function(treeLevel){with($H){
+			return ul(
+				apply(treeLevel, function(el){
+					return li(
+						span({orgID:el.id, "class":"orgTreeLink"}, el.name),
+						el.children?templates.orgTree(el.children):null
+					);
+				})
 			);
 		}},
 		table: function(rows){with($H){
 			var colDefs = db.getColumns();
-			return table({border:1, cellpadding:3, cellspacing:0},
-				tr(
-					apply(rows[0], function(c, i){
-						return th(
-							select(
-								option({value:"cmd_Exclude"}, "[исключить]"),
-								option({value:"cmd_CombineLeft"}, "[<< соединить влево]"),
-								option({value:"cmd_CombineRight"}, "[соединить вправо >>]"),
-								apply(colDefs, function(cDef){
-									return option({value:cDef.id}, cDef.name);
-								})
-							)
+			return div(
+				table({border:1, cellpadding:3, cellspacing:0},
+					tr(
+						apply(rows[0], function(c, i){
+							return th(
+								select(
+									option({value:"cmd_Exclude"}, "[исключить]"),
+									// option({value:"cmd_CombineLeft"}, "[<< соединить влево]"),
+									// option({value:"cmd_CombineRight"}, "[соединить вправо >>]"),
+									apply(colDefs, function(cDef){
+										return option({value:cDef.id}, cDef.name);
+									})
+								)
+							);
+						})
+					),
+					apply(rows, function(row){
+						return tr(
+							apply(row, function(col){
+								return td(col);
+							})
 						);
 					})
 				),
-				apply(rows, function(row){
-					return tr(
-						apply(row, function(col){
-							return td(col);
-						})
-					);
-				})
-			)
+				div(input({type:"button", "class":"btSave", value:"Сохранить"}))
+			);
 		}}
 	};
 	
@@ -98,6 +118,34 @@
 			});
 		});
 	}
+	
+	var docModel = {};
+	
+	function saveTable(){
+		if(!docModel.organization){
+			alert("Необходимо выбрать организацию!");
+			return;
+		}
+		var selectors = $("#resultPnl select");
+		var cols = [];
+		$.each(selectors, function(i, sel){
+			cols[i] = $(sel).val();
+		});
+		docModel.cols = cols;
+		docModel.objects = [];
+		$.each(docModel.rows, function(ir, row){
+			var obj = {}, colsFound = false;
+			$.each(row, function(ic, col){
+				var aNm = cols[ic];
+				if(aNm=="cmd_Exclude") return;
+				colsFound = true;
+				if(obj[aNm]) obj[aNm]+=" "+col; else obj[aNm] = col;
+			});
+			if(colsFound) docModel.objects.push(obj);
+		});
+		var json = JSON.stringify(docModel.objects);
+		alert("Saved!\n to organization:"+docModel.organization+"\n\n"+json);
+	}
 
 	function processData(){
 		var src = $("#srcText").val();
@@ -107,7 +155,9 @@
 			var cols = row.split("\t");
 			rows[i] = cols;
 		}
+		docModel.rows = rows;
 		$("#resultPnl").html(templates.table(rows));
+		$("#resultPnl .btSave").click(saveTable);
 		suggestColumns(rows);
 	}
 	
@@ -122,6 +172,11 @@
 				ticket = $USER.ticket;
 				pnl.html(templates.main());
 				pnl.find(".btProcess").click(processData);
+				pnl.find(".orgTreeLink").css({cursor:"pointer"}).click(function(){
+					pnl.find(".orgTreeLink").removeClass("selected");
+					$(this).addClass("selected");
+					docModel.organization = $(this).attr("orgID");
+				});
 			});
 		}
 	};
