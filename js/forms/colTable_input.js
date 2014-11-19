@@ -59,7 +59,10 @@
 						);
 					})
 				),
-				div(input({type:"button", "class":"btSave", value:"Сохранить"}))
+				div(
+					input({type:"button", "class":"btSave", value:"Сохранить"}),
+					img({src:"images/wait.gif", "class":"pnlWait", style:"display:none;"})
+				)
 			);
 		}}
 	};
@@ -144,7 +147,11 @@
 			if(colsFound) docModel.objects.push(obj);
 		});
 		var json = JSON.stringify(docModel.objects);
-		alert("Saved!\n to organization:"+docModel.organization+"\n\n"+json);
+		//alert("Saved!\n to organization:"+docModel.organization+"\n\n"+json);
+		$(".pnlWait").show();
+		$.post("ws/saveSet.php", {ticket: $USER.ticket, orgID:docModel.organization, persons:json}, function(resp){
+			$(".pnlWait").hide();
+		});
 	}
 
 	function processData(){
