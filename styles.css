@@ -144,3 +144,10 @@ div.dialog{
 .link{
 	cursor:pointer;
 }
+
+.orgTreeLink{
+	color:#008;
+}
+.orgTreeLink.selected{
+	background-color:#ee0;
+}
