@@ -40,7 +40,8 @@
 						th({align:"left"}, "Вышестоящая организация"), 
 						td(
 							div(
-								input({type:"text", readonly:true, "data-bind":"value:$super"}),
+								span({"data-bind":"text:superName"}),
+								//input({type:"text", readonly:true, "data-bind":"value:superName"}),
 								input({type:"button", value:"Выбрать", "data-bind":"click:openSelector"}),
 								input({type:"button", value:"Удалить", "data-bind":"click:clearSuper"})
 							),
@@ -71,10 +72,14 @@
 		$.extend(_,{
 			$id: org?org.id:null,
 			$name: ko.observable(org?org.name:""),
-			$super: ko.observable(null),
+			$super: ko.observable(org&&org.parent?org.parent.id:null),
 			selectorMode: ko.observable(false)
 		});
 		$.extend(_,{
+			superName: ko.computed(function(){
+				var org = db.getOrganization(_.$super());
+				return org?org.name:"";
+			}),
 			save: function(){
 				var data = util.getModelData(_);
 				data.ticket = $USER.ticket;
