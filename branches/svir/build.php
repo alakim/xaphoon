@@ -39,7 +39,8 @@ buildScripts(array(
 	'forms/table_input.js',
 	'forms/users.js',
 	'forms/verification.js',
-	'forms/myaccount.js'
+	'forms/myaccount.js',
+	'forms/orgedit.js'
 ), "main_admin.js");
 
 

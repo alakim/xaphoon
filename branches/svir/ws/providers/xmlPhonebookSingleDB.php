@@ -133,7 +133,7 @@ class XmlPhonebookSingleDB{
 	function saveOrganization($id, $data){
 		$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
 		foreach($data as $key => $val){
-			$node->setAttribute($key, $val);
+			if($key!='super') $node->setAttribute($key, $val);
 		}
 		$this->saveDocument();
 		echo('{"success":true}');
