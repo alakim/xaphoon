@@ -7,7 +7,8 @@
 	"forms/table_input", 
 	"forms/colTable_input", 
 	"forms/verification",
-	"forms/myaccount"
+	"forms/myaccount",
+	"forms/orgedit"
 ], function(
 	$, $H, ko, 
 	errors,
@@ -17,7 +18,8 @@
 	tableInput,
 	colTableInput,
 	verification,
-	myAccount
+	myAccount,
+	orgEditor
 ){
 
 	function template(permissions){with($H){
@@ -29,6 +31,7 @@
 				usr.ticket && permissions.verification?li({"data-bind":"click:verify"}, "Верификация данных"):null,
 				usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
 				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
+				usr.ticket?li({"data-bind":"click:viewOrgEditor"}, "Ввод организаций"):null,
 				usr.ticket?li({"data-bind":"click:dataInput"}, "Ввод данных"):null,
 				usr.ticket?li({"data-bind":"click:myAccount"}, "Мои данные"):null,
 				usr.ticket?li({"data-bind":"click:logoff"}, usr.name+" [Выйти]")
@@ -62,6 +65,9 @@
 			},
 			myAccount: function(){
 				myAccount.view();
+			},
+			viewOrgEditor:function(){
+				orgEditor.view();
 			}
 		});
 	}
