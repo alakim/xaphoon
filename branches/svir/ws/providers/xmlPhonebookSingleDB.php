@@ -134,6 +134,11 @@ class XmlPhonebookSingleDB{
 		$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
 		foreach($data as $key => $val){
 			if($key!='super') $node->setAttribute($key, $val);
+			else{
+				$node->parentNode->removeChild($node);
+				$supOrg = $this->xpath->query("//organization[@id='".$val."']")->item(0);
+				$supOrg->appendChild($node);
+			}
 		}
 		$this->saveDocument();
 		echo('{"success":true}');
