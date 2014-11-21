@@ -131,15 +131,31 @@ class XmlPhonebookSingleDB{
 	
 	// сохраняет данные организации
 	function saveOrganization($id, $data){
-		$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
+		if($id==null){
+			$node = $this->dbDoc->createElement('organization');
+			$id = $this->getNewID();
+			$node->setAttribute('id', $id);
+		}
+		else
+			$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
 		foreach($data as $key => $val){
 			if($key!='super') $node->setAttribute($key, $val);
 			else{
-				$node->parentNode->removeChild($node);
+				if($node->parentNode!=null)
+					$node->parentNode->removeChild($node);
 				$supOrg = $this->xpath->query("//organization[@id='".$val."']")->item(0);
-				$supOrg->appendChild($node);
+				if($supOrg!=null)
+					$supOrg->appendChild($node);
 			}
 		}
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
+	
+	function deleteOrganization($id){
+		if($id==null) {util.writeError('orgDoesNotExists'); return;}
+		$node = $this->xpath->query("//organization[@id='".$id."']")->item(0);
+		$node->parentNode->removeChild($node);
 		$this->saveDocument();
 		echo('{"success":true}');
 	}

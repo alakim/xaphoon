@@ -35,7 +35,7 @@
 		orgDialog: function(orgID){with($H){
 			return div(
 				table({border:1, cellpadding:3, cellspacing:0},
-					tr(th({align:"left"}, "ID"), td(input({type:"text", "data-bind":"value:$id"}))),
+					tr(th({align:"left"}, "ID"), td(input({type:"text", readonly:true, "data-bind":"value:$id"}))),
 					tr(
 						th({align:"left"}, "Вышестоящая организация"), 
 						td(
@@ -53,6 +53,7 @@
 					tr(th({align:"left"}, "Название"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$name"}))),
 					tr(td({colspan:3, align:"center"}, 
 						input({type:"button", value:"Ввод", "data-bind":"click:save"}),
+						input({type:"button", value:"Удалить", "data-bind":"click:delOrg"}),
 						img({"class":"pnlWait", src:"images/wait.gif", style:"display:none;"})
 					))
 				)
@@ -86,8 +87,14 @@
 				pnl.find(".pnlWait").show();
 				$.post("ws/saveOrgTree.php", data, function(resp){resp = JSON.parse(resp);
 					db.refresh(viewForm);
-					// pnl.find(".pnlWait").hide();
-					// pnl.find(".editPnl").html("");
+				});
+			},
+			delOrg: function(){
+				if(!confirm("Удалить данную организацию?")) return;
+				var data = {id:_.$id, ticket:$USER.ticket};
+				pnl.find(".pnlWait").show();
+				$.post("ws/delOrgTree.php", data, function(resp){resp = JSON.parse(resp);
+					db.refresh(viewForm);
 				});
 			},
 			openSelector: function(){
