@@ -115,7 +115,7 @@ class XmlPhonebookSingleDB{
 	
 	// добавляет данные сотрудника и сохраняет документ
 	function addPerson($orgID, $data){
-		createPerson($orgID, $data);
+		$this->createPerson($orgID, $data);
 		$this->saveDocument();
 		echo('{"success":true}');
 	}
@@ -146,6 +146,10 @@ class XmlPhonebookSingleDB{
 				$supOrg = $this->xpath->query("//organization[@id='".$val."']")->item(0);
 				if($supOrg!=null)
 					$supOrg->appendChild($node);
+				else{
+					$root = $this->xpath->query("//organizations")->item(0);
+					$root->appendChild($node);
+				}
 			}
 		}
 		$this->saveDocument();
@@ -164,7 +168,7 @@ class XmlPhonebookSingleDB{
 		$orgNode = $this->xpath->query("//organization[@id='".$orgID."'][1]")->item(0);
 		$persons = json_decode($jsonPersons);
 		foreach($persons as $pers){
-			createPerson($orgID, $pers);
+			$this->createPerson($orgID, $pers);
 		}
 		$this->saveDocument();
 		echo('{"success":true}');

@@ -54,7 +54,7 @@
 		var res = [];
 		$.each(coll, function(i, nd){
 			if(nd.xmltype=="organization"){
-				var el = {id:nd.id, name:nd.name, parent:nd.parent};
+				var el = {id:nd.id, name:nd.name, parent:nd.parent, priority:nd.priority};
 				if(nd.xmlchildren&&nd.xmlchildren.length){
 					el.children = getOrgTree(nd.xmlchildren);
 				}

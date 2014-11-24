@@ -3,6 +3,9 @@
 	<groups>
 		<group id="admins" name="Администраторы">
 			<access>
+				<organization id="i2"/>
+				<organization id="i6"/>
+				<organization id="i8"/>
 				<users/>
 				<verification/>
 			</access>

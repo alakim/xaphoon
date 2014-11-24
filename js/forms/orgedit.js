@@ -21,8 +21,13 @@
 			);
 		}},
 		orgTree: function(treeLevel, selectorMode){with($H){
+			var sorted = treeLevel.sort(function(n1,n2){
+				var p1 = (+n1.priority)||0,
+					p2 = (+n2.priority)||0;
+				return p1==p2?0:p1<p2?1:-1;
+			});
 			return ul(
-				apply(treeLevel, function(el){
+				apply(sorted, function(el){
 					var attr = {orgID:el.id, "class":"orgTreeLink", style:"cursor:pointer;"};
 					if(selectorMode) attr["data-bind"] = "click:selectSuper";
 					return li(
@@ -51,6 +56,7 @@
 						)
 					),
 					tr(th({align:"left"}, "Название"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$name"}))),
+					tr(th({align:"left"}, "Приоритет"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$priority"}))),
 					tr(td({colspan:3, align:"center"}, 
 						input({type:"button", value:"Ввод", "data-bind":"click:save"}),
 						input({type:"button", value:"Удалить", "data-bind":"click:delOrg"}),
@@ -74,6 +80,7 @@
 			$id: org?org.id:null,
 			$name: ko.observable(org?org.name:""),
 			$super: ko.observable(org&&org.parent?org.parent.id:null),
+			$priority: ko.observable(org?org.priority:0),
 			selectorMode: ko.observable(false)
 		});
 		$.extend(_,{
