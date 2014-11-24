@@ -3,8 +3,15 @@
 define("forms/phonebookAccordionView", ["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util){
 	var templates = {
 		main: function(tree, columns){with($H){
+			var arr = []; for(var k in tree) arr.push(tree[k]);
+			
+			var sorted = arr.sort(function(n1,n2){
+				var p1 = (+n1.priority)||0,
+					p2 = (+n2.priority)||0;
+				return p1==p2?0:p1<p2?1:-1;
+			});
 			return div(
-				apply(tree, function(org){
+				apply(sorted, function(org){
 					return templates.organization(org, 1, columns);
 				})
 			);
@@ -59,11 +66,13 @@ define("forms/phonebookAccordionView", ["jquery", "jqext", "html", "db", "util"]
 	
 	function getSections(org){
 		var res = {organizations:[], persons:[]};
-		for(var i=0,nd,c=org.xmlchildren; nd=c[i],i<c.length; i++){
-			if(nd.xmltype=="organization")
-				res.organizations.push(nd);
-			else if(nd.xmltype=="person")
-				res.persons.push(nd);
+		if(org.xmlchildren){
+			for(var i=0,nd,c=org.xmlchildren; nd=c[i],i<c.length; i++){
+				if(nd.xmltype=="organization")
+					res.organizations.push(nd);
+				else if(nd.xmltype=="person")
+					res.persons.push(nd);
+			}
 		}
 		return res;
 	}

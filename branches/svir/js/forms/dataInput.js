@@ -24,7 +24,8 @@
 				h3("Сотрудники"),
 				div({"class":"personList", style:"float:left;"},
 					apply(org.xmlchildren, function(el){
-						return el.xmltype=="person"?div({"class":"link personEditLink", prsID:el.id}, el.fio):null;
+						//console.log(el);
+						return el.xmltype=="person"?div({"class":"link personEditLink", prsID:el.id}, el.dolzh, "  ", el.fio):null;
 					})
 				),
 				div({"class":"personDialog", style:"margin-left:300px; display:none;"},
