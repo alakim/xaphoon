@@ -41,7 +41,11 @@ buildScripts(array(
 	'forms/users.js',
 	'forms/verification.js',
 	'forms/myaccount.js',
-	'forms/orgedit.js'
+	'forms/orgedit.js',
+	'controls/orgtree',
+	'controls/sortlist',
+	'controls/persondialog',
+	'mapping'
 ), "main_admin.js");
 
 
