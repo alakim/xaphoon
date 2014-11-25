@@ -3,11 +3,6 @@
 	$.fn.orgTree = function(callback, exceptions){
 		var templates = {
 			orgTree: function(treeLevel){with($H){
-				// var sorted = treeLevel.sort(function(n1,n2){
-				// 	var p1 = (+n1.priority)||0,
-				// 		p2 = (+n2.priority)||0;
-				// 	return p1==p2?0:p1<p2?1:-1;
-				// });
 				return ul(
 					apply(treeLevel, function(el){
 						if(exceptions && exceptions.indexOf(el.id)>=0) return;

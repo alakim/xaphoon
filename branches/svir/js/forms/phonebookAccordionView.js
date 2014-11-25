@@ -9,15 +9,15 @@ define("forms/phonebookAccordionView", [
 ){
 	var templates = {
 		main: function(tree, columns){with($H){
-			var arr = []; for(var k in tree) arr.push(tree[k]);
-			
-			var sorted = arr.sort(function(n1,n2){
-				var p1 = (+n1.priority)||0,
-					p2 = (+n2.priority)||0;
-				return p1==p2?0:p1<p2?1:-1;
-			});
+			// var arr = []; for(var k in tree) arr.push(tree[k]);
+			// 
+			// var sorted = arr.sort(function(n1,n2){
+			// 	var p1 = (+n1.priority)||0,
+			// 		p2 = (+n2.priority)||0;
+			// 	return p1==p2?0:p1<p2?1:-1;
+			// });
 			return div(
-				apply(sorted, function(org){
+				apply(tree, function(org){
 					return templates.organization(org, 1, columns);
 				})
 			);
