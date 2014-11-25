@@ -11,7 +11,7 @@
 	
 		var templates = {
 			main: function(){with($H){
-				return div({"class":"pnlOrgDialog"},
+				return div({"class":"pnlOrgDialog"},					h3("Данные организации"),
 					table({border:0, cellpadding:3, cellspacing:0},
 						tr(td("Наименование"),td(
 							input({type:"text", "data-bind":"value:$name"}),

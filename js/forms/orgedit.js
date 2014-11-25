@@ -65,7 +65,7 @@
 			$(".pnlSort").hide();
 			return;
 		}
-		$(".pnlSort").show().sortList(level, function(order, onSaved){
+		$(".pnlSort").show().sortList("Порядок организаций", level, function(order, onSaved){
 			var data = {
 				id: selectedOrg,
 				order: order.join(","),
