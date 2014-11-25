@@ -8,7 +8,8 @@
 	"forms/colTable_input", 
 	"forms/verification",
 	"forms/myaccount",
-	"forms/orgedit"
+	"forms/orgedit",
+	"forms/structedit"
 ], function(
 	$, $H, ko, 
 	errors,
@@ -19,7 +20,8 @@
 	colTableInput,
 	verification,
 	myAccount,
-	orgEditor
+	orgEditor,
+	structEditor
 ){
 
 	function template(permissions){with($H){
@@ -33,6 +35,7 @@
 				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
 				usr.ticket?li({"data-bind":"click:viewOrgEditor"}, "Ввод организаций"):null,
 				usr.ticket?li({"data-bind":"click:dataInput"}, "Ввод данных"):null,
+				usr.ticket?li({"data-bind":"click:editStructure"}, "Структура"):null,
 				usr.ticket?li({"data-bind":"click:myAccount"}, "Мои данные"):null,
 				usr.ticket?li({"data-bind":"click:logoff"}, usr.name+" [Выйти]")
 					:li({"data-bind":"click:authorization"}, "Авторизация")
@@ -62,6 +65,9 @@
 			},
 			dataInput: function(){
 				dataInput.view();
+			},
+			editStructure: function(){
+				structEditor.view();
 			},
 			myAccount: function(){
 				myAccount.view();

@@ -26,7 +26,7 @@ buildScripts(array(
 	'forms/phonebook_simple.js',
 	'forms/search.js',
 	'forms/verification.js',
-	'controls/printButton'
+	'controls/printButton.js'
 ), "main_pub.js");
 
 
@@ -42,11 +42,12 @@ buildScripts(array(
 	'forms/verification.js',
 	'forms/myaccount.js',
 	'forms/orgedit.js',
-	'controls/orgtree',
-	'controls/sortlist',
-	'controls/persondialog',
-	'controls/orgdialog',
-	'mapping'
+	"forms/structedit.js",
+	'controls/orgtree.js',
+	'controls/sortlist.js',
+	'controls/persondialog.js',
+	'controls/orgdialog.js',
+	'mapping.js'
 ), "main_admin.js");
 
 

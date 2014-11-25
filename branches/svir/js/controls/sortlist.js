@@ -1,9 +1,10 @@
 ﻿define("controls/sortlist", ["jquery", "html"], function($, $H) {
 	
-	$.fn.sortList = function(items, callback){
+	$.fn.sortList = function(title, items, callback){
 		var templates = {
 			main: function(){with($H){
 				return div(
+					title?h3(title):null,
 					table({border:0, cellpadding:10, cellspacing:0}, tr(
 						td({valign:"top"},
 							ol(

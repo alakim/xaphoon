@@ -65,6 +65,18 @@
 		return res;
 	}
 	
+	function getPersons(orgID){
+		var org = organizationIndex[orgID];
+		var res = [];
+		if(org.xmlchildren){
+			$.each(org.xmlchildren, function(i, el){
+				if(el.xmltype=="person")
+					res.push({id:el.id, name:el.dolzh+" "+el.fio});
+			});
+		}
+		return res;
+	}
+	
 	return {
 		init: function(callback){
 			$(".mainPanel").html($H.img({src:"images/wait.gif"}));
@@ -89,6 +101,7 @@
 		getColumns: function(){return localDB.data.columns;},
 		getOrganization: function(id){return organizationIndex[id];},
 		getPerson: function(id){return personIndex[id];},
+		getPersons: getPersons,
 		getAllOrganizations: function(){return organizations;},
 		getOrgTree: getOrgTree,
 		getAllPersons: function(){return persons;},
