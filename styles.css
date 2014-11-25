@@ -148,6 +148,6 @@ div.dialog{
 .orgTreeLink{
 	color:#008;
 }
-.orgTreeLink.selected{
+.selected{
 	background-color:#ee0;
 }
