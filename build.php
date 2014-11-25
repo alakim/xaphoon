@@ -45,6 +45,7 @@ buildScripts(array(
 	'controls/orgtree',
 	'controls/sortlist',
 	'controls/persondialog',
+	'controls/orgdialog',
 	'mapping'
 ), "main_admin.js");
 

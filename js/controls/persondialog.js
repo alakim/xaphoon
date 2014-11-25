@@ -76,17 +76,6 @@
 			
 			$.extend(_, {
 				existingRow: ko.computed(function(){return _.id()!=null;}, _),
-				openDialog: function(person){var _=this;
-					_.id(person?person.id:null);
-					for(var k in _){
-						if(k.slice(0,1)=="$"){
-							var val = person?person[mapping.getJsonAttr(k)]:"";
-							_[k](val);
-						}
-					}
-					$(".orgDialog").hide();
-					$(".pnlPersonDialog").show();
-				},
 				deletePerson:function(){var _=this;
 					if(!confirm("Удалить эту запись?")) return;
 					$.post("ws/delPerson.php", {id:_.id(), ticket:$USER.ticket}, function(resp){resp = JSON.parse(resp);
