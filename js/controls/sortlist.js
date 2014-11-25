@@ -32,39 +32,38 @@
 				list = pnl.find("ol");
 			
 			selected.detach();
-			var tail = list.find(".sortListItem");
-			tail.detach();
+			var tail = list.find(".sortListItem").detach();
 			
-			selected.each(function(i, el){list.append(el);});
-			tail.each(function(i, el){list.append(el);});
+			list.append(selected);
+			list.append(tail);
 		}
 		
 		function sortUp(pnl){pnl = $(pnl);
 			var selected = pnl.find(".selected"),
-				list = pnl.find("ol");
+				list = pnl.find("ol"),
+				prev = selected.first().prev();
 				
-				var prev = selected.first().prev();
 				if(!prev.length) return;
 				
 				selected.detach();
 				var tail = prev.prev().length?prev.prev().nextAll().detach():prev.parent().children().detach();
 				
-				selected.each(function(i, el){list.append(el);});
-				tail.each(function(i, el){list.append(el);});
+				list.append(selected);
+				list.append(tail);
 		}
 		
 		function sortDown(pnl){
 			var selected = pnl.find(".selected"),
-				list = pnl.find("ol");
+				list = pnl.find("ol"),
+				next = selected.last().next();
 				
-				var next = selected.last().next();
 				if(!next.length) return;
 				
 				selected.detach();
 				var tail = next.nextAll().detach();
 				
-				selected.each(function(i, el){list.append(el);});
-				tail.each(function(i, el){list.append(el);});
+				list.append(selected);
+				list.append(tail);
 		}
 		
 		function sortBottom(pnl){
@@ -72,8 +71,7 @@
 				list = pnl.find("ol");
 			
 			selected.detach();
-			
-			selected.each(function(i, el){list.append(el);});
+			list.append(selected);
 		}
 		
 		function clearSelection(pnl){
