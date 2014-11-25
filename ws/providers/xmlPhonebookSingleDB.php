@@ -165,11 +165,37 @@ class XmlPhonebookSingleDB{
 	}
 	
 	function saveSet($orgID, $jsonPersons){
+		
 		$orgNode = $this->xpath->query("//organization[@id='".$orgID."'][1]")->item(0);
 		$persons = json_decode($jsonPersons);
 		foreach($persons as $pers){
 			$this->createPerson($orgID, $pers);
 		}
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
+	
+	function saveOrgOrder($orgID, $order){
+		if($orgID!=null)
+			$parentNode = $this->xpath->query("//organization[@id='".$orgID."']")->item(0);
+		else
+			$parentNode = $this->xpath->query("//organizations")->item(0);
+			
+		$order = explode(',', $order);
+		
+		$orgs = array();
+		
+		foreach($order as $id){
+			$org = $this->xpath->query("//organization[@id='".$id."']", $parentNode)->item(0);
+			if($org!=null) $orgs[$id] = $org;
+		}
+		foreach($order as $id){
+			$parentNode->removeChild($orgs[$id]);
+		}
+		foreach($order as $id){
+			$parentNode->appendChild($orgs[$id]);
+		}
+		
 		$this->saveDocument();
 		echo('{"success":true}');
 	}

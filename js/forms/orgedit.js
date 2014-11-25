@@ -1,11 +1,11 @@
 ﻿define("forms/orgedit", [
 	"jquery", "html", "knockout", 
 	"db", "util", "validation", "errors",
-	"controls/orgtree"
+	"controls/orgtree", "controls/sortlist"
 ], function(
 	$, $H, ko, 
 	db, util, validation, errors,
-	orgTree
+	orgTree, sortList
 ){
 
 	var templates = {
@@ -13,11 +13,16 @@
 			return div(
 				table({border:0}, tr(
 					td({valign:"top"}, 
-						div(input({type:"button", value:"Создать организацию", "class":"btCreateNew"})),
+						div(
+							input({type:"button", value:"Сбросить выделение", "class":"btClearSelectedOrg"}),
+							input({type:"button", value:"Создать организацию", "class":"btCreateNew"}),
+							input({type:"button", value:"Изменить порядок", "class":"btSort"})
+						),
 						div({"class":"pnlOrgTree"})
 					),
 					td({valign:"top"},
-						div({"class":"editPnl"})
+						div({"class":"editPnl"}),
+						div({"class":"pnlSort", style:"display:none; border:1px solid #ccc; margin:5px; padding:5px;"})
 					)
 				))
 			);
@@ -52,7 +57,28 @@
 		}}
 	};
 	
-	var pnl, ticket;
+	var pnl, ticket, selectedOrg;
+	
+	function viewSortDialog(){
+		var level = selectedOrg?db.getOrgTree(db.getOrganization(selectedOrg).xmlchildren):db.getOrgTree();
+		if(!level.length){
+			$(".pnlSort").hide();
+			return;
+		}
+		$(".pnlSort").show().sortList(level, function(order, onSaved){
+			var data = {
+				id: selectedOrg,
+				order: order.join(","),
+				ticket: $USER.ticket
+			};
+			$.post("ws/saveOrgOrder.php", data, function(resp){resp = JSON.parse(resp);
+				onSaved();
+				$(".pnlSort").hide();
+				db.refresh(viewForm);
+			});
+		});
+		
+	}
 	
 	function viewOrgDialog(orgID){
 		pnl.find(".editPnl").html(templates.orgDialog(orgID));
@@ -107,10 +133,20 @@
 	function viewForm(){
 		pnl.html(templates.main());
 		pnl.find(".pnlOrgTree").orgTree(function(orgID){
+			selectedOrg = orgID;
 			viewOrgDialog(orgID);
+			pnl.find(".pnlSort").hide();
 		});
 		pnl.find(".btCreateNew").click(function(){
+			selectedOrg = null;
 			viewOrgDialog();
+		});
+		pnl.find(".btSort").click(viewSortDialog);
+		pnl.find(".btClearSelectedOrg").click(function(){
+			selectedOrg = null;
+			$(".pnlOrgTree .selected").removeClass("selected");
+			pnl.find(".editPnl").html("");
+			pnl.find(".pnlSort").hide();
 		});
 	}
 	
