@@ -11,7 +11,7 @@
 		function validate(newValue) {
 			var valid = newValue!=null 
 				&& typeof(newValue)=="string" 
-				&& newValue.match(/^[a-z0-9\-\_\.]+\@[a-z0-9\-\_\.]+\.[a-z]+$/)!=null;
+				&& newValue.match(/^[a-z0-9\-\_\.]+\@[a-z0-9\-\_\.]+\.[a-z]+$/i)!=null;
 			
 			target.hasError(!valid);
 			target.validationMessage(valid ? "" : "Укажите адрес электронной почты");
