@@ -46,7 +46,7 @@
 						)
 					),
 					tr(th({align:"left"}, "Название"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$name"}))),
-					tr(th({align:"left"}, "Приоритет"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$priority"}))),
+					//tr(th({align:"left"}, "Приоритет"), td(input({type:"text", style:"width:400px;", "data-bind":"value:$priority"}))),
 					tr(td({colspan:3, align:"center"}, 
 						input({type:"button", value:"Ввод", "data-bind":"click:save"}),
 						input({type:"button", value:"Удалить", "data-bind":"click:delOrg"}),
@@ -92,7 +92,7 @@
 			$id: org?org.id:null,
 			$name: ko.observable(org?org.name:""),
 			$super: ko.observable(org&&org.parent?org.parent.id:null),
-			$priority: ko.observable(org?org.priority:0),
+			//$priority: ko.observable(org?org.priority:0),
 			selectorMode: ko.observable(false)
 		});
 		$.extend(_,{

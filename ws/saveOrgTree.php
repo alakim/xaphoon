@@ -14,8 +14,8 @@ $dbProvider = ProviderFactory::getPhonebook();
 
 $data = array(
 	'name'=>$_POST['name'],
-	'super'=>$_POST['super'],
-	'priority'=>$_POST['priority']
+	'super'=>$_POST['super']
+	//'priority'=>$_POST['priority']
 );
 
 $dbProvider->saveOrganization($_POST['id'], $data);
