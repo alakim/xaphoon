@@ -1,9 +1,11 @@
 ﻿define("forms/orgedit", [
 	"jquery", "html", "knockout", 
-	"db", "util", "validation", "errors"
+	"db", "util", "validation", "errors",
+	"controls/orgtree"
 ], function(
 	$, $H, ko, 
-	db, util, validation, errors
+	db, util, validation, errors,
+	orgTree
 ){
 
 	var templates = {
@@ -12,29 +14,12 @@
 				table({border:0}, tr(
 					td({valign:"top"}, 
 						div(input({type:"button", value:"Создать организацию", "class":"btCreateNew"})),
-						templates.orgTree(db.getOrgTree())
+						div({"class":"pnlOrgTree"})
 					),
 					td({valign:"top"},
 						div({"class":"editPnl"})
 					)
 				))
-			);
-		}},
-		orgTree: function(treeLevel, selectorMode){with($H){
-			var sorted = treeLevel.sort(function(n1,n2){
-				var p1 = (+n1.priority)||0,
-					p2 = (+n2.priority)||0;
-				return p1==p2?0:p1<p2?1:-1;
-			});
-			return ul(
-				apply(sorted, function(el){
-					var attr = {orgID:el.id, "class":"orgTreeLink", style:"cursor:pointer;"};
-					if(selectorMode) attr["data-bind"] = "click:selectSuper";
-					return li(
-						span(attr, el.name),
-						el.children?templates.orgTree(el.children, selectorMode):null
-					);
-				})
 			);
 		}},
 		orgDialog: function(orgID){with($H){
@@ -51,7 +36,7 @@
 								input({type:"button", value:"Удалить", "data-bind":"click:clearSuper"})
 							),
 							div({"class":"orgSelector", style:"border:1px solid #ccc;", "data-bind":"visible:selectorMode"},
-								templates.orgTree(db.getOrgTree(null), true)
+								div({"class":"pnlOrgTree"})
 							)
 						)
 					),
@@ -71,6 +56,7 @@
 	
 	function viewOrgDialog(orgID){
 		pnl.find(".editPnl").html(templates.orgDialog(orgID));
+		pnl.find(".orgSelector .pnlOrgTree").orgTree("selectSuper", [orgID]);
 		ko.applyBindings(new OrgModel(orgID), pnl.find(".editPnl div")[0]);
 	}
 	
@@ -120,10 +106,8 @@
 	
 	function viewForm(){
 		pnl.html(templates.main());
-		pnl.find(".orgTreeLink").click(function(){
-			pnl.find(".orgTreeLink").removeClass("selected");
-			$(this).addClass("selected");
-			viewOrgDialog($(this).attr("orgID"));
+		pnl.find(".pnlOrgTree").orgTree(function(orgID){
+			viewOrgDialog(orgID);
 		});
 		pnl.find(".btCreateNew").click(function(){
 			viewOrgDialog();

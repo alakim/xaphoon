@@ -1,4 +1,4 @@
-﻿define("jqext", ["jquery", "html"], function($, $H) {
+﻿define("controls/printButton", ["jquery", "html"], function($, $H) {
 	/******** jQuery Extensions ********/
 	
 	$.fn.printVersion = function(){

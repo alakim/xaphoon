@@ -25,7 +25,8 @@ buildScripts(array(
 	'forms/phonebookView.js',
 	'forms/phonebook_simple.js',
 	'forms/search.js',
-	'forms/verification.js'
+	'forms/verification.js',
+	'controls/printButton'
 ), "main_pub.js");
 
 
