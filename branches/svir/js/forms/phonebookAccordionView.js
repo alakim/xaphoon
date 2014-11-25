@@ -1,6 +1,12 @@
 ﻿// Отображение документа, экспортированного из Excel to ODS в виде иерархии по организациям
 
-define("forms/phonebookAccordionView", ["jquery", "jqext", "html", "db", "util"], function($, $ext, $H, db, util){
+define("forms/phonebookAccordionView", [
+	"jquery", "html", "db", "util",
+	"controls/printButton"
+], function(
+	$, $H, db, util,
+	printButton
+){
 	var templates = {
 		main: function(tree, columns){with($H){
 			var arr = []; for(var k in tree) arr.push(tree[k]);
@@ -29,6 +35,7 @@ define("forms/phonebookAccordionView", ["jquery", "jqext", "html", "db", "util"]
 			);
 		}},
 		personsTable: function(persList, colDefs){with($H){
+			if(!persList.length) return;
 			var columns = getColumns(persList);
 			return table({border:1, cellpadding:3, cellspacing:0},
 				tr(

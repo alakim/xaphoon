@@ -1,41 +1,28 @@
 ﻿define("forms/colTable_input", [
 	"jquery", "html", "knockout",
 	"util", "validation", "errors",
-	"textLib", "db"
+	"textLib", "db",
+	"controls/orgtree"
 ], function(
 	$, $H, ko,
 	util, validation, errors,
-	textLib, db
+	textLib, db,
+	orgTree
 ){
 
 	var templates = {
 		main: function(){with($H){
 			return div(
 				table(tr(
-					td({width:250},
+					td({width:250, valign:"top"},
 						textarea({id:"srcText", style:style({width:800, height:300})}),
 						div(input({type:"button", value:"Ввод", "class":"btProcess"}))
 					),
-					td(
-						templates.orgTree(db.getOrgTree())
+					td({valign:"top"},
+						div({"class":"pnlOrgTree"})
 					)
 				)),
 				div({id:"resultPnl"})
-			);
-		}},
-		orgTree: function(treeLevel){with($H){
-			var sorted = treeLevel.sort(function(n1,n2){
-				var p1 = (+n1.priority)||0,
-					p2 = (+n2.priority)||0;
-				return p1==p2?0:p1<p2?1:-1;
-			});
-			return ul(
-				apply(sorted, function(el){
-					return li(
-						span({orgID:el.id, "class":"orgTreeLink"}, el.name),
-						el.children?templates.orgTree(el.children):null
-					);
-				})
 			);
 		}},
 		table: function(rows){with($H){
@@ -183,12 +170,10 @@
 				pnl = $("#out");
 				ticket = $USER.ticket;
 				pnl.html(templates.main());
-				pnl.find(".btProcess").click(processData);
-				pnl.find(".orgTreeLink").css({cursor:"pointer"}).click(function(){
-					pnl.find(".orgTreeLink").removeClass("selected");
-					$(this).addClass("selected");
-					docModel.organization = $(this).attr("orgID");
+				pnl.find(".pnlOrgTree").orgTree(function(orgID){
+					docModel.organization = orgID;
 				});
+				pnl.find(".btProcess").click(processData);
 			});
 		}
 	};
