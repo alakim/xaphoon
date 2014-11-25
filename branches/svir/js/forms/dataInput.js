@@ -2,12 +2,14 @@
 	"jquery", "html", "knockout", "db", 
 	"util", "validation", "errors",
 	"mapping",
-	"controls/persondialog"
+	"controls/persondialog",
+	"controls/orgdialog"
 ], function(
 	$, $H, ko, db, 
 	util, validation, errors,
 	mapping,
-	personDialog
+	personDialog,
+	orgDialog
 ){
 
 	var templates = {
@@ -42,32 +44,7 @@
 					),
 					td({valign:"top"},
 						div({"class":"personDialog"}),
-						div({"class":"orgDialog", style:"display:none;"},
-							table({border:0, cellpadding:3, cellspacing:0},
-								tr(td("Наименование"),td(
-									input({type:"text", "data-bind":"value:$name"}),
-									util.validMsg("$name")
-								)),
-								tr(td("Рабочий телефон"),td(
-									input({type:"text", "data-bind":"value:$workPhone"}),
-									util.validMsg("$workPhone")
-								)),
-								tr(td("Факс"),td(
-									input({type:"text", "data-bind":"value:$fax"}),
-									util.validMsg("$fax")
-								)),
-								tr(td("Электронный адрес"),td(
-									input({type:"text", "data-bind":"value:$email"}),
-									util.validMsg("$email")
-								)),
-								tr(td("Почтовый адрес"),td(
-									input({type:"text", "data-bind":"value:$address"}),
-									util.validMsg("$address")
-								))
-							),
-							input({type:"button", "data-bind":"click:submitData", value:"Сохранить"}),
-							span({"class":"savingIcon", style:"display:none"}, img({src:"images/wait.gif", style:"margin:0 0 0 10px;"}))
-						)
+						div({"class":"orgDialog"})
 					)
 				))
 			):null;
@@ -76,82 +53,25 @@
 	
 	var pnl, ticket;
 	
+	function refreshAll(){
+		db.refresh(function(){
+			viewEditPanel();
+		});
+	}
+	
 	function viewEditPanel(){
 		var orgID = $("#out .selOrg").val();
 		$("#out .editPnl").html(templates.editPanel(orgID));
 		
-		var orgModel = new OrganizationModel();
 		$("#out .editPnl .orgEditLink").click(function(){
-			orgModel.openDialog(db.getOrganization(orgID));
+			$("#out .editPnl .orgDialog").orgDialog(orgID, refreshAll);
 		});
-		
 		$("#out .editPnl .personEditLink").click(function(){
 			var prsID = $(this).attr("prsID");
-			$("#out .editPnl .personDialog").personDialog(prsID, function(){
-				db.refresh(function(){
-					viewEditPanel();
-				});
-			});
+			$("#out .editPnl .personDialog").personDialog(prsID, refreshAll);
 		});
 		$("#out .btAddPerson").click(function(){
-			$("#out .editPnl .personDialog").personDialog(null, function(){
-				db.refresh(function(){
-					viewEditPanel();
-				});
-			});
-		});
-
-		
-		ko.applyBindings(orgModel, pnl.find(".orgDialog")[0]);
-	}
-	
-
-	function OrganizationModel(){var _=this;
-		$.extend(_, {
-			id:ko.observable(),
-			$name:ko.observable("").extend({required:"Укажите название организации"}),
-			$workPhone:ko.observable(""), //.extend({required:"Укажите рабочий телефон"}),
-			$fax:ko.observable(""), //.extend({required:"Укажите факс"}),
-			$email:ko.observable(""),//.extend({requiredEMail:"Укажите электронный адрес"}),
-			$address:ko.observable("")//.extend({required:"Укажите почтовый адрес"})
-		});
-		$.extend(_, {
-			openDialog: function(org){var _=this;
-				_.id(org?org.id:null);
-				for(var k in _){
-					if(k.slice(0,1)=="$"){
-						var val = org?org[mapping.getJsonAttr(k)]:"";
-						_[k](val);
-					}
-				}
-				$(".personDialog").hide();
-				$(".orgDialog").show();
-			},
-			submitData: function(){var _=this;
-				if(!validation.validate(_)) return;
-				var res = {id:_.id(), ticket:ticket};
-				res.orgID = $("#out .selOrg").val();
-				for(var k in _){
-					if(k.slice(0,1)=="$"){
-						var attNm = mapping.getJsonAttr(k);
-						var val = _[k]();
-						res[attNm] = val==null?"":val;
-					}
-				}
-				$("#out .savingIcon").show();
-				$.post("ws/saveOrg.php", res, function(resp){resp = JSON.parse(resp);
-					$("#out .savingIcon").hide();
-					if(resp.error){
-						alert(errors.code[resp.error]);
-						return;
-					}
-					$(".orgDialog").hide();
-					db.refresh(function(){
-						viewEditPanel();
-					});
-				});
-			}
-
+			$("#out .editPnl .personDialog").personDialog(null, refreshAll);
 		});
 	}
 	
