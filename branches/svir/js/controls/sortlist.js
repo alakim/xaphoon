@@ -22,7 +22,10 @@
 							div(input({type:"button", "class":"btSortClear", value:"Сбросить выделение"}))
 						)
 					)),
-					div({style:"margin:5px 0 0 20px;"}, input({type:"button", value:"Сохранить", "class":"btSaveSorted"}))
+					div({style:"margin:5px 0 0 20px;"}, 
+						input({type:"button", value:"Сохранить", "class":"btSaveSorted"}),
+						img({"class":"pnlWait", src:"images/wait.gif", style:"display:none;"})
+					)
 				);
 			}}
 		};
@@ -83,6 +86,9 @@
 			el.html(
 				templates.main(items)
 			);
+			function onSaved(){
+				el.find(".pnlWait").hide();
+			}
 			el.find(".sortListItem").click(function(){
 				var el = $(this), cls = "selected";
 				if(el.hasClass(cls)) el.removeClass(cls); else el.addClass(cls);
@@ -93,12 +99,13 @@
 			el.find(".btSortBottom").click(function(){sortBottom(el);});
 			el.find(".btSortClear").click(function(){clearSelection(el);});
 			el.find(".btSaveSorted").click(function(){
+				el.find(".pnlWait").show();
 				var order = [];
 				el.find(".sortListItem").each(function(i,itm){
 					var elID = $(itm).attr("elID");
 					order.push(elID);
 				});
-				callback(order);
+				callback(order, onSaved);
 			});
 		});
 	};
