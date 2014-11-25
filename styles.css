@@ -157,4 +157,5 @@ div.dialog{
 	margin:5px;
 	padding:5px;
 	border-radius:5px;
+	box-shadow: 3px 3px 5px #ddd;
 }
