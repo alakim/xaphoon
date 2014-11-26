@@ -42,9 +42,6 @@
 				save: function(order, onsaved){
 					alert("New organizations order: " + order.join());
 					onsaved();
-				},
-				openEditor: function(elID){
-					alert("Edit "+elID+" ");
 				}
 			});
 			$("#prsList").sortList(persons, {
@@ -53,7 +50,22 @@
 					alert("New persons order: " + order.join());
 					onsaved();
 				},
-				openEditor: false
+				itemActions:[
+					{
+						title:"Show item ID",
+						action: function(elID, oncomplete){
+							alert("Item #"+elID);
+							oncomplete();
+						},
+						oncomplete: function(){alert("Done!");}
+					},
+					{
+						title:"Редактировать",
+						action: function(elID){
+							alert("Edit item #"+elID);
+						}
+					}
+				]
 			});
 		});		
 	</script>
@@ -61,8 +73,8 @@
 <body>
 	<table border="0" cellpadding="3" cellspacing="0">
 		<tr>
-			<td width="480"><div id="orgList"></div></td>
-			<td width="480"><div id="prsList"></div></td>
+			<td valign="top" width="580"><div id="orgList"></div></td>
+			<td valign="top"><div id="prsList"></div></td>
 		</tr>
 	</table>
 </body>
