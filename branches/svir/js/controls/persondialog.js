@@ -123,7 +123,7 @@
 				submitData: function(){var _=this;
 					if(!validation.validate(_)) return;
 					var res = {id:_.id(), ticket:$USER.ticket};
-					res.orgID = $("#out .selOrg").val();
+					res.orgID = _.$organization(); //$("#out .selOrg").val();
 					for(var k in _){
 						if(k.slice(0,1)=="$"){
 							var attNm = mapping.getJsonAttr(k);

@@ -79,8 +79,15 @@ class XmlPhonebookSingleDB{
 	}
 	
 	// сохраняет данные сотрудника
-	function savePerson($id, $data){
+	function savePerson($id, $data, $orgID){
 		$node = $this->xpath->query("//person[@id='".$id."']")->item(0);
+	
+		$org = $this->xpath->query("//organization[@id='".$orgID."']")->item(0);
+		if($orgID!=$node->parentNode->getAttribute("id")){
+			$node->parentNode->removeChild($node);
+			$org->appendChild($node);
+		}
+		
 		foreach($data as $key => $val){
 			$node->setAttribute($key, $val);
 		}
