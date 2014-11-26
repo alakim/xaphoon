@@ -11,7 +11,7 @@
 	
 		var templates = {
 			main: function(){with($H){
-				return div({"class":"pnlPersonDialog"},
+				return div({"class":"pnlPersonDialog panel"},
 					table({border:0, cellpadding:3, cellspacing:0},
 						tr(td("ФИО"),td(
 							input({type:"text", "data-bind":"value:$fio"}),

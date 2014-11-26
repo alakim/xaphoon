@@ -2,6 +2,11 @@
 	
 	$.fn.orgTree = function(callback, exceptions){
 		var templates = {
+			main: function(){with($H){
+				return div({"class":"panel"},
+					templates.orgTree(db.getOrgTree())
+				);
+			}},
 			orgTree: function(treeLevel){with($H){
 				return ul(
 					apply(treeLevel, function(el){
@@ -18,9 +23,7 @@
 		};
 		
 		$(this).each(function(i, el){el=$(el);
-			el.html(
-				templates.orgTree(db.getOrgTree())
-			);
+			el.html(templates.main());
 			if(typeof(callback)=="function"){
 				el.find(".orgTreeLink").click(function(){
 					el.find(".orgTreeLink").removeClass("selected");

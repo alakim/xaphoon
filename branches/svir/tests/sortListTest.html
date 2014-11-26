@@ -39,8 +39,9 @@
 			];
 			$("#orgList").sortList(organizations, {
 				title: "Организации",
-				save: function(order){
+				save: function(order, onsaved){
 					alert("New organizations order: " + order.join());
+					onsaved();
 				},
 				openEditor: function(elID){
 					alert("Edit "+elID+" ");
@@ -48,8 +49,9 @@
 			});
 			$("#prsList").sortList(persons, {
 				title: "Персоналии",
-				save: function(order){
+				save: function(order, onsaved){
 					alert("New persons order: " + order.join());
+					onsaved();
 				},
 				openEditor: false
 			});

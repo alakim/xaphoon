@@ -18,9 +18,9 @@
 						div({"class":"pnlOrgTree"})
 					),
 					td({valign:"top"}, 
-						div({"class":"pnlOrgDialog panel", style:"display:none;"}),
-						div({"class":"pnlOrgSort panel", style:"display:none;"}),
-						div({"class":"pnlPersSort panel", style:"display:none;"})
+						div({"class":"pnlOrgDialog", style:"display:none;"}),
+						div({"class":"pnlOrgSort", style:"display:none;"}),
+						div({"class":"pnlPersSort", style:"display:none;"})
 					)
 				))
 			);
@@ -37,8 +37,11 @@
 			$(".pnlOrgSort").hide();
 		}
 		else{
-			pnl.find(".pnlStruct .pnlOrgSort").show().sortList("Порядок подчиненных организаций", level, function(order, onSaved){
-				onSaved();
+			pnl.find(".pnlStruct .pnlOrgSort").show().sortList(level, {
+				title: "Порядок подчиненных организаций", 
+				save: function(order, onSaved){
+					onSaved();
+				}
 			});
 		}
 		
@@ -46,8 +49,11 @@
 		if(!persList.length)
 			$(".pnlPersSort").hide();
 		else{
-			pnl.find(".pnlStruct .pnlPersSort").show().sortList("Порядок сотрудников", persList, function(order, onSaved){
-				onSaved();
+			pnl.find(".pnlStruct .pnlPersSort").show().sortList(persList, {
+				title: "Порядок сотрудников",
+				save: function(order, onSaved){
+					onSaved();
+				}
 			});
 		}
 	}
