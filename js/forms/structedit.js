@@ -2,17 +2,20 @@
 	"jquery", "html", "knockout", 
 	"db", "util", "validation", "errors",
 	"controls/orgtree", "controls/sortlist",
-	"controls/orgdialog"
+	"controls/orgdialog",
+	"controls/persondialog"
 ], function(
 	$, $H, ko, 
 	db, util, validation, errors,
 	orgTree, sortList,
-	orgDialog
+	orgDialog, 
+	personDialog
 ){
 
 	var templates = {
 		main: function(){with($H){
 			return div({"class":"pnlStruct"},
+				h2("Управление структурой БД"),
 				table({border:0, cellpadding:3, cellspacing:0}, tr(
 					td({valign:"top"},
 						div({"class":"pnlOrgTree"})
@@ -20,7 +23,8 @@
 					td({valign:"top"}, 
 						div({"class":"pnlOrgDialog", style:"display:none;"}),
 						div({"class":"pnlOrgSort", style:"display:none;"}),
-						div({"class":"pnlPersSort", style:"display:none;"})
+						div({"class":"pnlPersSort", style:"display:none;"}),
+						div({"class":"pnlPersDialog", style:"display:none;"})
 					)
 				))
 			);
@@ -53,7 +57,17 @@
 				title: "Порядок сотрудников",
 				save: function(order, onSaved){
 					onSaved();
-				}
+				},
+				actionButtonsWidth:250,
+				itemActions:[
+					{title:"Данные сотрудника", 
+						action:function(elID){
+							pnl.find(".pnlPersDialog").show().personDialog(elID, updateView, true);
+							// alert(elID);
+							// oncomplete();
+						}
+					}
+				]
 			});
 		}
 	}

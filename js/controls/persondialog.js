@@ -7,16 +7,31 @@
 	validation
 ) {
 	
-	$.fn.personDialog = function(prsID, onSaved){
-	
+	$.fn.personDialog = function(prsID, onSaved, enableOrgSelection){
+		enableOrgSelection = enableOrgSelection||false;
 		var templates = {
 			main: function(){with($H){
 				return div({"class":"pnlPersonDialog panel"},
+					h3("Данные сотрудника"),
 					table({border:0, cellpadding:3, cellspacing:0},
 						tr(td("ФИО"),td(
 							input({type:"text", "data-bind":"value:$fio"}),
 							util.validMsg("$fio")
 						)),
+						enableOrgSelection?tr(
+							th({align:"left"}, "Организация"), 
+							td(
+								div(
+									span({"data-bind":"text:orgName"}),
+									//input({type:"text", readonly:true, "data-bind":"value:superName"}),
+									input({type:"button", value:"Выбрать", "data-bind":"click:openOrgSelector"}),
+									input({type:"button", value:"Удалить", "data-bind":"click:clearOrg"})
+								),
+								div({"class":"orgSelector", style:"border:1px solid #ccc;", "data-bind":"visible:selectorMode"},
+									div({"class":"pnlOrgSelTree"})
+								)
+							)
+						):null,
 						tr(td("Должность"),td(
 							input({type:"text", "data-bind":"value:$post"}),
 							util.validMsg("$post")
@@ -60,9 +75,11 @@
 		
 		function PersonModel(prsID){var _=this;
 			var prs = prsID?db.getPerson(prsID):null;
+			//console.log(prs);
 			function prop(nm){return prs?prs[mapping.getJsonAttr(nm)]:"";}
 			$.extend(_, {
 				id:ko.observable(prs?prsID:null),
+				$organization: ko.observable(prs&&prs.parent?prs.parent.id:null),
 				$fio:ko.observable(prop("$fio")).extend({required:"Укажите ФИО"}),
 				$post:ko.observable(prop("$post")).extend({required:"Укажите должность"}),
 				$inPhone:ko.observable(prop("$inPhone")), //.extend({required:"Укажите внутренний телефон"}),
@@ -71,11 +88,27 @@
 				$mobPhone:ko.observable(prop("$mobPhone")), //.extend({required:"Укажите мобильный телефон"}),
 				$email:ko.observable(prop("$email")).extend({requiredEMail:"Укажите электронный адрес"}),
 				$roomNr:ko.observable(prop("$roomNr")).extend({required:"Укажите номер комнаты"}),
-				$address:ko.observable(prop("$address"))//.extend({required:"Укажите почтовый адрес"})
+				$address:ko.observable(prop("$address")), //.extend({required:"Укажите почтовый адрес"})
+				selectorMode: ko.observable(false)
 			});
 			
 			$.extend(_, {
+				orgName: ko.computed(function(){
+					var org = db.getOrganization(_.$organization());
+					return org?org.name:"";
+				}),
 				existingRow: ko.computed(function(){return _.id()!=null;}, _),
+				openOrgSelector: function(){
+					this.selectorMode(true);
+				},
+				selectOrganization: function(m, e){
+					var orgID = $(e.target).attr("orgID");
+					this.$organization(orgID);
+					this.selectorMode(false);
+				},
+				clearOrg: function(){
+					this.$organization(null);
+				},
 				deletePerson:function(){var _=this;
 					if(!confirm("Удалить эту запись?")) return;
 					$.post("ws/delPerson.php", {id:_.id(), ticket:$USER.ticket}, function(resp){resp = JSON.parse(resp);
@@ -117,6 +150,7 @@
 			el.html(
 				templates.main()
 			);
+			el.find(".orgSelector .pnlOrgSelTree").orgTree("selectOrganization", [prsID]);
 			ko.applyBindings(new PersonModel(prsID), el.find(".pnlPersonDialog")[0]);
 		});
 	};
