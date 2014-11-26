@@ -23,26 +23,45 @@
 		});
 
 		requirejs(["jquery", "html", "controls/sortlist"], function($, $H, mainMenu, sortList) {
-			$(".mainMenu").html("***Main menu****");
 			var organizations = [
-				{id:"i1", name:"Завод №1"},
-				{id:"i2", name:"Завод №2"},
-				{id:"i3", name:"Завод №3"},
-				{id:"i4", name:"Завод №4"},
-				{id:"i5", name:"Завод №5"}
+				{id:"org1", name:"Завод №1"},
+				{id:"org2", name:"Завод №2"},
+				{id:"org3", name:"Завод №3"},
+				{id:"org4", name:"Завод №4"},
+				{id:"org5", name:"Завод №5"}
 			];
-			$("#out").sortList(organizations, function(order){
-				alert("New order: " + order.join());
+			var persons = [
+				{id:"prs1", name:"Сотрудник №1"},
+				{id:"prs2", name:"Сотрудник №2"},
+				{id:"prs3", name:"Сотрудник №3"},
+				{id:"prs4", name:"Сотрудник №4"},
+				{id:"prs5", name:"Сотрудник №5"}
+			];
+			$("#orgList").sortList(organizations, {
+				title: "Организации",
+				save: function(order){
+					alert("New organizations order: " + order.join());
+				},
+				openEditor: function(elID){
+					alert("Edit "+elID+" ");
+				}
+			});
+			$("#prsList").sortList(persons, {
+				title: "Персоналии",
+				save: function(order){
+					alert("New persons order: " + order.join());
+				},
+				openEditor: false
 			});
 		});		
 	</script>
 </head>
 <body>
-	<nav class="mainMenu">
-		<img src="images/wait.gif"/>
-	</nav>
-	<div id="out">
-		
-	</div>
+	<table border="0" cellpadding="3" cellspacing="0">
+		<tr>
+			<td width="480"><div id="orgList"></div></td>
+			<td width="480"><div id="prsList"></div></td>
+		</tr>
+	</table>
 </body>
 </html>
