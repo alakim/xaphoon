@@ -24,7 +24,7 @@ $data = array(
 	'potchtAdr'=>$_POST['potchtAdr']
 );
 
-$dbProvider->savePerson($_POST['id'], $data);
+$dbProvider->savePerson($_POST['id'], $data, $_POST['orgID']);
 
 
 
