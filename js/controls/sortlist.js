@@ -4,7 +4,7 @@
 		options = $.extend({
 			title: null,
 			save: function(){},
-			openEditor: null // или function(elID){}, где elID - ID редактируемого элемента списка
+			itemActions:[] // элементы типа {title:"", action:function(elID, oncomplete), необязательный oncomplete:function()}
 		}, options);
 		
 		function changed(pnl, on){
@@ -33,13 +33,22 @@
 							div(input({type:"button", style:style({width:mvBtWidth}), "class":"btSortDown", value:"Вниз"})),
 							div(input({type:"button", style:style({width:mvBtWidth}), "class":"btSortBottom", value:"В конец"}))
 						)),
-						td(div({"class":"pnlButtons", style:"display:none;"},
-							div(input({type:"button", style:style({width:actBtWidth}), "class":"btSortClear", value:"Сбросить выделение"})),
-							div(input({type:"button", style:style({width:actBtWidth}), "class":"btSortInvert", value:"Инвертировать выделение"})),
-							options.openEditor?div(input({type:"button", style:style({width:actBtWidth}), "class":"btEditElement", value:"Редактировать элемент"})):null
+						td(div({"class":"pnlItemButtons", style:"display:none;"},
+							apply(options.itemActions, function(act, idx){
+								return div(
+									input({
+										type:"button", style:style({width:actBtWidth}), 
+										"class":"btAct"+idx, value:act.title
+									})
+								);
+							})
 						))
 					)),
-					div({style:"margin:5px 0 0 20px;"}, 
+					div({style:"margin:5px 0 0 20px;"},
+						div({"class":"pnlButtons", style:"display:none;"},
+							input({type:"button", style:style({width:actBtWidth}), "class":"btSortClear", value:"Сбросить выделение"}),
+							input({type:"button", style:style({width:actBtWidth}), "class":"btSortInvert", value:"Инвертировать выделение"})
+						),
 						table({border:0}, tr(
 						td(input({type:"button", value:"Сохранить порядок", "class":"btSaveSorted", style:"display:none;"})),
 						td(div({"class":"pnlWait", style:"display:none; width:20px; height:20px;"}))
@@ -112,21 +121,18 @@
 			showButtons(pnl);
 		}
 		
-		function openEditor(pnl){
-			if(!options.openEditor) return;
-			var elID = pnl.find(".selected").attr("elID");
-			options.openEditor(elID);
-		}
-		
 		function showButtons(pnl){
 			var selCont = pnl.find(".selected").length,
-				pnlButtons = pnl.find(".pnlButtons");
+				pnlButtons = pnl.find(".pnlButtons"),
+				pnlItemButtons = pnl.find(".pnlItemButtons");
 			if(selCont>0){
 				pnlButtons.show();
-				var btEdit = pnl.find(".btEditElement");
-				if(selCont==1) btEdit.show(); else btEdit.hide();
+				if(selCont==1) pnlItemButtons.show(); else pnlItemButtons.hide();
 			}
-			else pnlButtons.hide();
+			else {
+				pnlButtons.hide();
+				pnlItemButtons.hide();
+			}
 		}
 		
 		function saveList(pnl){
@@ -163,8 +169,12 @@
 			el.find(".btSortBottom").click(function(){sortBottom(el);});
 			el.find(".btSortClear").click(function(){clearSelection(el);});
 			el.find(".btSortInvert").click(function(){invertSelection(el);});
-			el.find(".btEditElement").click(function(){openEditor(el);});
 			el.find(".btSaveSorted").click(function(){saveList(el);});
+			$.each(options.itemActions, function(idx, act){
+				el.find(".btAct"+idx).click(function(){
+					act.action(el.find(".selected").attr("elID"), act.oncomplete);
+				});
+			});
 		});
 	};
 });

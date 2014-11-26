@@ -78,8 +78,7 @@
 					$(".pnlSort").hide();
 					db.refresh(viewForm);
 				});
-			},
-			openEditor: false
+			}
 		});
 		
 	}
