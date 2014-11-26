@@ -3,6 +3,7 @@
 	$.fn.sortList = function(items, options){
 		options = $.extend({
 			title: null,
+			actionButtonsWidth: 150,
 			save: function(){},
 			itemActions:[] // элементы типа {title:"", action:function(elID, oncomplete), необязательный oncomplete:function()}
 		}, options);
@@ -16,7 +17,7 @@
 		var templates = {
 			main: function(){with($H){
 				var mvBtWidth = 80,
-					actBtWidth = 190;
+					actBtWidth = options.actionButtonsWidth;
 				return div({"class":"panel"},
 					options.title?h3(options.title):null,
 					table({border:0, cellpadding:10, cellspacing:0}, tr(
