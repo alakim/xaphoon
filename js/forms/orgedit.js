@@ -22,13 +22,13 @@
 					),
 					td({valign:"top"},
 						div({"class":"editPnl"}),
-						div({"class":"pnlSort", style:"display:none; border:1px solid #ccc; margin:5px; padding:5px;"})
+						div({"class":"pnlSort", style:"display:none;"})
 					)
 				))
 			);
 		}},
 		orgDialog: function(orgID){with($H){
-			return div(
+			return div({"class":"panel"},
 				table({border:1, cellpadding:3, cellspacing:0},
 					tr(th({align:"left"}, "ID"), td(input({type:"text", readonly:true, "data-bind":"value:$id"}))),
 					tr(
@@ -65,17 +65,21 @@
 			$(".pnlSort").hide();
 			return;
 		}
-		$(".pnlSort").show().sortList("Порядок организаций", level, function(order, onSaved){
-			var data = {
-				id: selectedOrg,
-				order: order.join(","),
-				ticket: $USER.ticket
-			};
-			$.post("ws/saveOrgOrder.php", data, function(resp){resp = JSON.parse(resp);
-				onSaved();
-				$(".pnlSort").hide();
-				db.refresh(viewForm);
-			});
+		$(".pnlSort").show().sortList(level, {
+			title: "Порядок организаций", 
+			save: function(order, onSaved){
+				var data = {
+					id: selectedOrg,
+					order: order.join(","),
+					ticket: $USER.ticket
+				};
+				$.post("ws/saveOrgOrder.php", data, function(resp){resp = JSON.parse(resp);
+					onSaved();
+					$(".pnlSort").hide();
+					db.refresh(viewForm);
+				});
+			},
+			openEditor: false
 		});
 		
 	}

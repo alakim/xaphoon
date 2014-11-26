@@ -4,7 +4,7 @@
 		options = $.extend({
 			title: null,
 			save: function(){},
-			openEditor: function(){} // или null, если редактирование запрещено
+			openEditor: null // или function(elID){}, где elID - ID редактируемого элемента списка
 		}, options);
 		
 		function changed(pnl, on){
@@ -17,7 +17,7 @@
 			main: function(){with($H){
 				var mvBtWidth = 80,
 					actBtWidth = 190;
-				return div(
+				return div({"class":"panel"},
 					options.title?h3(options.title):null,
 					table({border:0, cellpadding:10, cellspacing:0}, tr(
 						td({valign:"top"},
@@ -41,7 +41,7 @@
 					)),
 					div({style:"margin:5px 0 0 20px;"}, 
 						table({border:0}, tr(
-						td(input({type:"button", value:"Сохранить", "class":"btSaveSorted", style:"display:none;"})),
+						td(input({type:"button", value:"Сохранить порядок", "class":"btSaveSorted", style:"display:none;"})),
 						td(div({"class":"pnlWait", style:"display:none; width:20px; height:20px;"}))
 						))
 					)
@@ -131,7 +131,9 @@
 		
 		function saveList(pnl){
 			function onSaved(){
-				el.find(".pnlWait").hide();
+				pnl.find(".pnlWait").hide();
+				clearSelection(pnl);
+				changed(pnl, false);
 			}
 			pnl.find(".pnlWait").show();
 			var order = [];
