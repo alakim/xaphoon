@@ -3,9 +3,9 @@
 	function template(){with($H){
 		return div(
 			ul({"class":"menu"},
-				li({"data-bind":"click:showAll"}, "Просмотр"),
+				li({"data-bind":"click:search"}, "Поиск"),
+				li({"data-bind":"click:showAll"}, "Просмотр")
 				//li({"data-bind":"click:showTable"}, "Отладочный просмотр таблицы"),
-				li({"data-bind":"click:search"}, "Поиск")
 			)
 		);
 	}}
@@ -28,8 +28,9 @@
 	return {
 		view: function(pnl){
 			pnl.html(template());
-			ko.applyBindings(new Model(), pnl.find("div")[0]);
-			
+			var model = new Model();
+			ko.applyBindings(model, pnl.find("div")[0]);
+			model.search();
 		}
 	};
 });
