@@ -182,7 +182,7 @@ class XmlPhonebookSingleDB{
 		echo('{"success":true}');
 	}
 	
-	function saveOrgOrder($orgID, $order){
+	function saveOrder($orgID, $order, $tagName){
 		if($orgID!=null)
 			$parentNode = $this->xpath->query("//organization[@id='".$orgID."']")->item(0);
 		else
@@ -190,21 +190,29 @@ class XmlPhonebookSingleDB{
 			
 		$order = explode(',', $order);
 		
-		$orgs = array();
+		$items = array();
 		
 		foreach($order as $id){
-			$org = $this->xpath->query("//organization[@id='".$id."']", $parentNode)->item(0);
-			if($org!=null) $orgs[$id] = $org;
+			$pers = $this->xpath->query("//".$tagName."[@id='".$id."']", $parentNode)->item(0);
+			if($pers!=null) $items[$id] = $pers;
 		}
 		foreach($order as $id){
-			$parentNode->removeChild($orgs[$id]);
+			$parentNode->removeChild($items[$id]);
 		}
 		foreach($order as $id){
-			$parentNode->appendChild($orgs[$id]);
+			$parentNode->appendChild($items[$id]);
 		}
 		
 		$this->saveDocument();
 		echo('{"success":true}');
+	}
+	
+	function saveOrgOrder($orgID, $order){
+		$this->saveOrder($orgID, $order, "organization");
+	}
+	
+	function savePersOrder($orgID, $order){
+		$this->saveOrder($orgID, $order, "person");
 	}
 }
 

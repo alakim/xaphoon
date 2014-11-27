@@ -44,7 +44,16 @@
 			pnl.find(".pnlStruct .pnlOrgSort").show().sortList(level, {
 				title: "Порядок подчиненных организаций", 
 				save: function(order, onSaved){
-					onSaved();
+					var data = {
+						id: orgID,
+						order: order.join(","),
+						ticket: $USER.ticket
+					};
+					$.post("ws/saveOrgOrder.php", data, function(resp){resp = JSON.parse(resp);
+						onSaved();
+						$(".pnlSort").hide();
+						db.refresh(viewForm);
+					});
 				}
 			});
 		}
@@ -56,7 +65,16 @@
 			pnl.find(".pnlStruct .pnlPersSort").show().sortList(persList, {
 				title: "Порядок сотрудников",
 				save: function(order, onSaved){
-					onSaved();
+					var data = {
+						id: orgID,
+						order: order.join(","),
+						ticket: $USER.ticket
+					};
+					$.post("ws/savePersOrder.php", data, function(resp){resp = JSON.parse(resp);
+						onSaved();
+						$(".pnlSort").hide();
+						db.refresh(viewForm);
+					});
 				},
 				actionButtonsWidth:250,
 				itemActions:[
