@@ -1,4 +1,4 @@
-﻿define("forms/colTable_input", [
+﻿define("forms/structColTable_input", [
 	"jquery", "html", "knockout",
 	"util", "validation", "errors",
 	"textLib", "db",
@@ -13,7 +13,8 @@
 	var templates = {
 		main: function(){with($H){
 			return div(
-				p("Загрузка таблиц сотрудников в формате CSV с разделителем TAB. Для привязки загружаемых сотрудников к организации следует выбрать организацию в дереве слева."),
+				p("Загрузка данных в формате CSV с разделителем TAB. Данные могут содержать таблицы сотрудников и иерархию организаций."),
+				p("Строки, содержащие наименования подразделений должны начинаться с одного или нескольких знаков '@', количество которых обозначает уровень иерархии."),
 				table(tr(
 					td({valign:"top"},
 						div({"class":"pnlOrgTree"})
@@ -28,13 +29,18 @@
 		}},
 		table: function(rows){with($H){
 			var colDefs = db.getColumns();
+			var colCount = 0;
+			for(var r,i=0; r=rows[i],i<rows.length; i++){
+				if(colCount<r.length)colCount=r.length;
+			}
 			return div(
 				table({border:1, cellpadding:3, cellspacing:0},
 					tr(
-						apply(rows[0], function(c, i){
+						// apply(rows[0], function(c, i){
+						times(colCount, function(i){
 							return th(
 								select(
-									option({value:"cmd_Exclude"}, "[исключить]"),
+									option({value:"cmd_Exclude", style:"color:red;"}, "[исключить]"),
 									// option({value:"cmd_CombineLeft"}, "[<< соединить влево]"),
 									// option({value:"cmd_CombineRight"}, "[соединить вправо >>]"),
 									apply(colDefs, function(cDef){
@@ -46,9 +52,10 @@
 					),
 					apply(rows, function(row){
 						return tr(
-							apply(row, function(col){
-								return td(col);
-							})
+							row.level?td({colspan:colCount},row.name)
+								:apply(row, function(col){
+									return td(col);
+								})
 						);
 					})
 				),
@@ -70,11 +77,11 @@
 	}
 	
 	function checkType(val){
-		if(val.match(/директор|помощник|инженер|секретарь|специалист|программист/i)) return "dolzh";
+		if(val.match(/директор|помощник|начальник|руководитель|инженер|секретарь|специалист|программист/i)) return "dolzh";
 		if(val.match(/(вич|вна)$/i) && val.split(/\s+/).length==3) return "fio";
 		if(val.match(/^\d\d\d\d$/i)) return "vnutTel";
 		if(val.match(/\((495|499)\)/) || val.match(/^\d\d\d-\d\d-\d\d$/i)) return "rabTel";
-		if(val.match(/\((915|926|905)\)/) || val.match(/^\d\d\d-\d\d-\d\d$/i)) return "mobTel";
+		if(val.match(/\((915|916|926|905|985)\)/) || val.match(/^\d\d\d-\d\d-\d\d$/i)) return "mobTel";
 		if(val.match(/[a-z0-9\.\_\-]@[a-z0-9\.\_\-]/i)) return "elekAdr";
 		if(val.match(/эт\.|каб\. /i)) return "numKomn";
 		if(val.match(/Москва|наб\.|ул\./i)) return "potchtAdr";
@@ -153,8 +160,16 @@
 		for(var i=0; i<rows.length; i++){
 			var row = rows[i];
 			if(row.match(/^\s*$/)) continue;
-			var cols = row.split("\t");
-			rows[i] = cols;
+			var mt = row.match(/^\s*(@+)([^\t]+)/);
+			if(mt){
+				var level = mt[1].length,
+					name = mt[2];
+				rows[i] = {level:level, name:name};
+			}
+			else{
+				var cols = row.split("\t");
+				rows[i] = cols;
+			}
 		}
 		docModel.rows = rows;
 		$("#resultPnl").html(templates.table(rows));

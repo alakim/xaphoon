@@ -9,7 +9,8 @@
 	"forms/verification",
 	"forms/myaccount",
 	"forms/orgedit",
-	"forms/structedit"
+	"forms/structedit",
+	"forms/structColTable_input"
 ], function(
 	$, $H, ko, 
 	errors,
@@ -21,7 +22,8 @@
 	verification,
 	myAccount,
 	orgEditor,
-	structEditor
+	structEditor,
+	structColTableInput
 ){
 
 	function template(permissions){with($H){
@@ -31,7 +33,8 @@
 			ul({"class":"menu"},
 				usr.ticket && permissions.users?li({"data-bind":"click:showUsers"}, "Пользователи"):null,
 				usr.ticket && permissions.verification?li({"data-bind":"click:verify"}, "Верификация данных"):null,
-				usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
+				//usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
+				usr.ticket?li({"data-bind":"click:structColTableInput"}, "Ввод структуры"):null,
 				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
 				usr.ticket?li({"data-bind":"click:viewOrgEditor"}, "Ввод организаций"):null,
 				usr.ticket?li({"data-bind":"click:dataInput"}, "Ввод данных"):null,
@@ -62,6 +65,9 @@
 			},
 			colTableInput: function(){
 				colTableInput.view();
+			},
+			structColTableInput: function(){
+				structColTableInput.view();
 			},
 			dataInput: function(){
 				dataInput.view();
