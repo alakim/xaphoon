@@ -1,6 +1,7 @@
 <?php
 //require('../util.php');
 require('providers/factory.php');
+include 'identity.php';
 
 $ticket = $_POST["ticket"];
 if($ticket==null){
@@ -18,21 +19,14 @@ $ids = array();
 $newIDs = array();
 $notIdenfified = array();
 
-$idCounter = 0;
+$idItems = $xp->query("//*[@id]");
+$identity = new Identity($idItems);
+if($identity->itemsChanged){
+	$dbProvider->saveDocument();
+}
+
 function getNewID(){
-	global $idCounter;
-	global $newIDs;
-	global $ids;
-	$id = "id".$idCounter;
-	if(array_key_exists($id, $ids)){
-		$idCounter = $idCounter+1;
-		return getNewID();
-	}
-	else {
-		$ids[$id] = true;
-		array_push($newIDs, $id);
-		return $id;
-	}
+	return $identity->getNewID();
 }
 
 $errors = array();
