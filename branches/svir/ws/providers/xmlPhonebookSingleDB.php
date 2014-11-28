@@ -6,6 +6,7 @@
 **/
 
 include 'xml2json.php';
+include 'identity.php';
 
 class XmlPhonebookSingleDB{
 	
@@ -16,6 +17,8 @@ class XmlPhonebookSingleDB{
 		$this->dbDoc = new DOMDocument('1.0', 'UTF-8');
 		$this->dbDoc->load(self::$docPath) or die('Error loading '.self::$docPath);
 		$this->xpath = new DOMXPath($this->dbDoc);
+		$items = $this->xpath->query("//*[@id]");
+		$this->identity = new Identity($items);
 	}
 	
 
@@ -95,19 +98,8 @@ class XmlPhonebookSingleDB{
 		echo('{"success":true}');
 	}
 	
-	private $lastNewIDCounter = 1;
-	// создает новый уникальный идентификатор
 	function getNewID(){
-		$counter = $this->lastNewIDCounter;
-		$id = "i".$counter;
-		$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
-		while($nodes->length>0){
-			$counter = $counter+1;
-			$id = "i".$counter;
-			$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
-		}
-		$this->lastNewIDCounter = $counter;
-		return $id;
+		return $this->identity->getNewID();
 	}
 	
 	// добавляет данные сотрудника
