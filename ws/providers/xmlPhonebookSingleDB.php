@@ -182,6 +182,47 @@ class XmlPhonebookSingleDB{
 		echo('{"success":true}');
 	}
 	
+	function saveStruct($orgID, $jsonStruct){
+		if($orgID!=null)
+			$parentNode = $this->xpath->query("//organization[@id='".$orgID."']")->item(0);
+		else
+			$parentNode = $this->xpath->query("//organizations")->item(0);
+		
+		$struct = json_decode($jsonStruct);
+		$orgIDs = array();
+		$organizations = $struct->organizations;
+		foreach($organizations as $org){
+			$id = $this->getNewID();
+			$orgIDs[$org->id] = $id;
+			if($org->parent==null) $orgParent = $parentNode;
+			else $orgParent = $this->xpath->query("//organization[@id='".$orgIDs[$org->parent]."'][1]")->item(0);
+			
+			$ndOrg = $this->dbDoc->createElement("organization");
+			$orgParent->appendChild($ndOrg);
+			$ndOrg->setAttribute('id', $id);
+			$ndOrg->setAttribute('name', $org->name);
+		}
+		$persons = $struct->persons;
+		foreach($persons as $pers){
+			//echo('>'.$pers->org.'< '.($pers->org==null)."\n");
+			if($pers->org==null) $persParent = $parentNode;
+			else $persParent = $this->xpath->query("//organization[@id='".$orgIDs[$pers->org]."'][1]")->item(0);
+			//echo("..........".$persParent->tagName."+++\n");
+			$ndPers = $this->dbDoc->createElement("person");
+			$persParent->appendChild($ndPers);
+			$ndPers->setAttribute('id', $this->getNewID());
+			$data = get_object_vars($pers);
+			foreach($data as $key => $val){
+				if($key=='org')continue;
+				$ndPers->setAttribute($key, $val);
+			}
+			//echo(".".$ndPers->tagName."+\n");
+		}
+		
+		$this->saveDocument();
+		echo('{"success":true}');
+	}
+	
 	function saveOrder($orgID, $order, $tagName){
 		if($orgID!=null)
 			$parentNode = $this->xpath->query("//organization[@id='".$orgID."']")->item(0);
