@@ -37,7 +37,7 @@
 				table({border:1, cellpadding:3, cellspacing:0},
 					tr(
 						// apply(rows[0], function(c, i){
-						times(colCount, function(i){
+						repeat(colCount, function(i){
 							return th(
 								select(
 									option({value:"cmd_Exclude", style:"color:red;"}, "[исключить]"),
@@ -52,7 +52,10 @@
 					),
 					apply(rows, function(row){
 						return tr(
-							row.level?td({colspan:colCount},row.name)
+							row.level?td({colspan:colCount},
+									repeat(row.level, function(){return "&gt;";}), " ",
+									row.name
+								)
 								:apply(row, function(col){
 									return td(col);
 								})
@@ -125,31 +128,69 @@
 	var docModel = {};
 	
 	function saveTable(){
-		if(!docModel.organization){
-			alert("Необходимо выбрать организацию!");
-			return;
-		}
+		// if(!docModel.organization){
+		// 	alert("Необходимо выбрать организацию!");
+		// 	return;
+		// }
 		var selectors = $("#resultPnl select");
 		var cols = [];
 		$.each(selectors, function(i, sel){
 			cols[i] = $(sel).val();
 		});
 		docModel.cols = cols;
-		docModel.objects = [];
+		
+		var LocalID = (function(){
+			var count = 1;
+			return function(){
+				return "loc"+(count++);
+			};
+		})();
+		
+		docModel.structure = {
+			organizations:[],
+			persons:[]
+		};
+		var curLevel = 0,
+			curOrg = null,
+			parentOrg = null,
+			parents = {};
 		$.each(docModel.rows, function(ir, row){
-			var obj = {}, colsFound = false;
-			$.each(row, function(ic, col){
-				var aNm = cols[ic];
-				if(aNm=="cmd_Exclude") return;
-				colsFound = true;
-				if(obj[aNm]) obj[aNm]+=" "+col; else obj[aNm] = col;
-			});
-			if(colsFound) docModel.objects.push(obj);
+			//if(ir<5)console.log(row);
+			if(row.level){
+				if(row.level>curLevel)
+					parentOrg = curOrg;
+				else if(row.level<curLevel)
+					parentOrg = parents[parentOrg];
+				
+				var org = {
+					id:LocalID(),
+					name: row.name,
+					parent:parentOrg
+				};
+				parents[org.id] = org.parent;
+				curOrg = org.id; curLevel = row.level;
+				docModel.structure.organizations.push(org);
+			}
+			else{
+				var pers = {org:curOrg}, colsFound = false;
+				$.each(row, function(ic, col){
+					var aNm = cols[ic];
+					if(aNm=="cmd_Exclude") return;
+					colsFound = true;
+					if(pers[aNm]) pers[aNm]+=" "+col; else pers[aNm] = col;
+				});
+				if(colsFound) docModel.structure.persons.push(pers);
+			}
 		});
-		var json = JSON.stringify(docModel.objects);
+		
+		//console.log(docModel.structure);
+		//return;
+		//
+		
+		var json = JSON.stringify(docModel.structure);
 		//alert("Saved!\n to organization:"+docModel.organization+"\n\n"+json);
 		$(".pnlWait").show();
-		$.post("ws/saveSet.php", {ticket: $USER.ticket, orgID:docModel.organization, persons:json}, function(resp){
+		$.post("ws/saveStruct.php", {ticket: $USER.ticket, orgID:docModel.organization, structure:json}, function(resp){
 			$(".pnlWait").hide();
 		});
 	}

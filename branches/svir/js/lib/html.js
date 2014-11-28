@@ -29,6 +29,12 @@ var Html = {
 		});
 		return res.join("");
 	}
+	function times(count, F, delim){
+		var h = [];
+		for(var i=0; i<count; i++)
+			h.push(F(i+1));
+		return h.join(delim||"");
+	}
 	
 	function emptyValue(v){return !v ||(typeof(v)=="string"&&v.length==0);}
 	
@@ -70,12 +76,8 @@ var Html = {
 			return h.join(delim||"");
 		},
 		
-		times: function(count, F, delim){
-			var h = [];
-			for(var i=0; i<count; i++)
-				h.push(F(i+1));
-			return h.join(delim||"");
-		},
+		repeat: times,
+		times: times,
 		
 		markup: markup,
 		tagCollection: markup,
