@@ -95,9 +95,10 @@ class XmlPhonebookSingleDB{
 		echo('{"success":true}');
 	}
 	
+	private $lastNewIDCounter = 1;
 	// создает новый уникальный идентификатор
 	function getNewID(){
-		$counter = 1;
+		$counter = $this->lastNewIDCounter;
 		$id = "i".$counter;
 		$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
 		while($nodes->length>0){
@@ -105,6 +106,7 @@ class XmlPhonebookSingleDB{
 			$id = "i".$counter;
 			$nodes = $this->xpath->query("//*[@id='".$id."'][1]");
 		}
+		$this->lastNewIDCounter = $counter;
 		return $id;
 	}
 	
