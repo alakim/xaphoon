@@ -17,8 +17,15 @@ function buildScripts($sources, $target){
 }
 
 buildScripts(array(
+	'lib/jquery-1.11.0.min.js',
+	//'lib/html.js',
+	//'lib/jspath.js',
+	//'lib/knockout-3.1.0.js',
 	'main.js',
 	'util.js',
+	'db.js',
+	'dataSource.js',
+	'validation.js',
 	'forms/authorization.js',
 	'forms/mainMenu.js',
 	'forms/phonebookAccordionView.js',
