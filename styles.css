@@ -111,8 +111,8 @@ div.dialog{
 #out h2{font-size:18px; padding-left:20px;}
 #out h3{font-size:16px; padding-left:40px;}
 #out h4{font-size:14px; padding-left:60px;}
-#out h5{font-size:12px; padding-left:80px;}
-#out h6{font-size:12px; padding-left:100px;}
+#out h5{font-size:14px; padding-left:80px;}
+#out h6{font-size:14px; padding-left:100px;}
 #out h1,h2,h3,h4,h5,h6{
 	font-family: Verdana, Arial, Sans-Serif;
 	font-weight:normal;
