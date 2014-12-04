@@ -34,6 +34,7 @@ if($userProvider->checkUser($usr, $psw)){
 	$_SESSION["usrName"] = $nm;
 	$_SESSION["usrID"] = $usr;
 	$sessionProvider->setSession($usr, $ticket);
+	header("Content-type: text/html; charset=windows-1251");
 	echo("{\"ticket\":\"".$ticket."\",\"login\":\"".$usr."\",\"name\":\"".$nm."\"}");
 }
 else{
