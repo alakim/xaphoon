@@ -51,6 +51,9 @@
 					return div(
 						div({"class":"title"}, itm.fio || itm.name),
 						div({"class":"properties"},
+							itm.xmltype=="organization"?div(
+								span({"class":"orglink link", orgID:itm.id}, "Показать структуру")
+							):null,
 							itm.parent?div(
 								span({style:"font-weight:bold;"},
 									itm.xmltype=="person"?"Организация "

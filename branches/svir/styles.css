@@ -163,3 +163,6 @@ div.pnlWait{
 	background:url('images/wait.gif') no-repeat;
 	margin:2px;
 }
+.highlight{
+	background-color:#fffff0;
+}
