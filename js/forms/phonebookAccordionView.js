@@ -93,6 +93,12 @@ define("forms/phonebookAccordionView", [
 				for(var i=0,prt=pnl.parent(); prt.length&&i<1000; prt=prt.parent(),i++){
 					prt.show();
 				}
+				var pos = pnl.position();
+				window.scrollTo(0, pos.top);
+				pnl.addClass("highlight");
+				setTimeout(function(){
+					pnl.removeClass("highlight");
+				},800);
 			}
 		});
 	}
