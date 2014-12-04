@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // *********************************************
 // **                                         **
 // **            Javascript builder           **
@@ -17,7 +17,7 @@ function buildScripts($sources, $target){
 }
 
 buildScripts(array(
-	'lib/jquery-1.11.0.min.js',
+	//'lib/jquery-1.11.0.min.js',
 	//'lib/html.js',
 	//'lib/jspath.js',
 	//'lib/knockout-3.1.0.js',
