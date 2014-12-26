@@ -29,6 +29,7 @@ buildScripts(array(
 	'forms/authorization.js',
 	'forms/mainMenu.js',
 	'forms/phonebookAccordionView.js',
+	'forms/phonebookTableView.js',
 	'forms/phonebookView.js',
 	'forms/phonebook_simple.js',
 	'forms/search.js',
