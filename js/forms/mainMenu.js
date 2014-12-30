@@ -3,9 +3,9 @@
 	function template(){with($H){
 		return div(
 			ul({"class":"menu"},
-				li({"data-bind":"click:search"}, "Поиск"),
-				li({"data-bind":"click:showTable"}, "Таблица"),
-				li({"data-bind":"click:showTree"}, "Дерево")
+				li({"class":"mnSearch", "data-bind":"click:search"}, "Поиск"),
+				li({"class":"mnTable", "data-bind":"click:showTable"}, "Таблица"),
+				li({"class":"mnTree", "data-bind":"click:showTree"}, "Дерево")
 				//li({"data-bind":"click:showTable"}, "Отладочный просмотр таблицы"),
 			)
 		);

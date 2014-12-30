@@ -21,9 +21,10 @@ define("forms/phonebookTableView", [
 			var colCount = 0;
 			return div(
 				tree.length&&tree[0].parent?p(
-					{"class":"lnkSuper link", parentID:tree[0].parent.id, style:"margin:5px;"}, 
+					{"class":"lnkSuper link", parentID:tree[0].parent.id}, 
 					"Показать вышестоящую организацию: ", tree[0].parent.name
 				):null,
+				tree.length&&tree[0]?p({"class":"link lnkTree", orgID:tree[0].id}, "Показать в дереве"):null,
 				table({border:1, cellpadding:3, cellspacing:0},
 					tr(
 						apply(columns, function(col){
@@ -109,9 +110,16 @@ define("forms/phonebookTableView", [
 					var parentID = $(this).attr("parentID");
 					display(parentID);
 				});
+				$("#out .pnlTable .lnkTree").click(function(){
+					var orgID = $(this).attr("orgID");
+					require("forms/phonebookAccordionView").view(orgID);
+				});
 			}
 			
 			db.init(function(){
+				$(".mainMenu li").removeClass("selected");
+				$(".mainMenu .mnTable").addClass("selected");
+				
 				$("#out").html(templates.main());
 				if(orgID) display(orgID);
 				else displaySelector();
