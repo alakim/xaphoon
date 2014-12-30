@@ -143,6 +143,8 @@ div.dialog{
 
 .link{
 	cursor:pointer;
+	text-decoration:underline;
+	color:#008;
 }
 
 .orgTreeLink{

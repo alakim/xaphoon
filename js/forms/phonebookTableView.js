@@ -8,17 +8,25 @@ define("forms/phonebookTableView", [
 	printButton
 ){
 	var templates = {
-		main: function(tree, columns){with($H){
-			var colCount = 0;
+		main: function(){with($H){
 			return div(
 				div(
 					div(input({"type":"button", "class":"btSelOrg", value:"Выбрать организацию"})),
 					div({"class":"orgSelector", style:"display:none;"})
 				),
+				div({"class":"pnlTable"})
+			);
+		}},
+		mainTable: function(tree, columns){with($H){
+			var colCount = 0;
+			return div(
+				tree.length&&tree[0].parent?p(
+					{"class":"lnkSuper link", parentID:tree[0].parent.id, style:"margin:5px;"}, 
+					"Показать вышестоящую организацию: ", tree[0].parent.name
+				):null,
 				table({border:1, cellpadding:3, cellspacing:0},
 					tr(
 						apply(columns, function(col){
-							//console.log(col);
 							if(col.id=="name") return;
 							colCount++;
 							return th(col.name);
@@ -74,28 +82,39 @@ define("forms/phonebookTableView", [
 	return {
 		view: function(orgID){
 		
+			function displaySelector(){
+				var pnl = $("#out .orgSelector"),
+					btn = $("#out .btSelOrg");
+				if(!pnl.html().length){
+					pnl.html(templates.orgSelector());
+					pnl.find(".node").click(function(){
+						el=$(this);
+						var oID = el.attr("orgID");
+						//console.log(oID);
+						pnl.slideUp();
+						display(oID);
+						btn.show();
+					});
+				}
+				pnl.slideDown();
+				btn.hide();
+			}
+		
 			function display(id){
-				//console.log(id);
 				var tree = id?[db.getOrganization(id)]:db.getTree();
-				$("#out").html(templates.main(tree, db.getColumns()));
+				$("#out .pnlTable").html(templates.mainTable(tree, db.getColumns()));
 				$("#out table").printVersion();
-				$("#out .btSelOrg").click(function(){
-					var pnl = $("#out .orgSelector");
-					if(!pnl.html().length){
-						pnl.html(templates.orgSelector());
-						pnl.find(".node").click(function(){
-							el=$(this);
-							var oID = el.attr("orgID");
-							pnl.slideUp();
-							display(oID);
-						});
-					}
-					pnl.slideDown();
+				$("#out .btSelOrg").click(displaySelector);
+				$("#out .pnlTable .lnkSuper").click(function(){
+					var parentID = $(this).attr("parentID");
+					display(parentID);
 				});
 			}
 			
 			db.init(function(){
-				display(orgID);
+				$("#out").html(templates.main());
+				if(orgID) display(orgID);
+				else displaySelector();
 			});
 		}
 	};
