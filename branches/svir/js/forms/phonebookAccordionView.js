@@ -27,6 +27,7 @@ define("forms/phonebookAccordionView", [
 			return div({"class":"orgPanel", orgID:org.id},
 				tag("h"+level, [{"class":"orgTitle"}, org.name]),
 				div({"class":"orgSubPanel"},
+					p({"class":"link lnkTable", orgID:org.id}, "Показать в таблице"),
 					templates.personsTable(sections.persons, columns),
 					apply(sections.organizations, function(org){
 						return templates.organization(org, level+1, columns);
@@ -119,11 +120,18 @@ define("forms/phonebookAccordionView", [
 							el.slideDown();
 					});
 				});
+				$("#out .lnkTable").click(function(){
+					var orgID = $(this).attr("orgID");
+					require("forms/phonebookTableView").view(orgID);
+				});
 				
 				$("#out table").printVersion();
 				if(orgID) expandTree(orgID);
 			}
 			db.init(function(){
+				$(".mainMenu li").removeClass("selected");
+				$(".mainMenu .mnTree").addClass("selected");
+
 				display(db.getTree(), db.getColumns(), orgID);
 			});
 		}

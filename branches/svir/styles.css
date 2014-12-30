@@ -3,15 +3,25 @@
 	margin: 0px;
 }
 
-.mainMenu{
-	border-top: 1px solid #ccc;
-}
 nav ul li{
 	float: left;
-	margin:10px;
+	margin:5px;
 	margin-left: 25px;
 	list-style-type: none;
 }
+.mainMenu{
+	border-top: 1px solid #ccc;
+}
+.mainMenu li {
+	padding:3px;
+}
+.mainMenu .selected{
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-shadow: 1px 1px 2px #ccc;
+}
+
 #out{
 	border-top: 1px solid #ccc;
 	clear: left;
@@ -168,3 +178,7 @@ div.pnlWait{
 .highlight{
 	background-color:#fffff0;
 }
+
+#out .pnlTable .link{margin:5px;}
+#out .orgSubPanel .link{margin:5px;}
+

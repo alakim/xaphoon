@@ -122,7 +122,8 @@
 		});
 		$("#resPnl .orglink").click(function(){
 			var orgID = $(this).attr("orgID");
-			require("forms/phonebookAccordionView").view(orgID);
+			//require("forms/phonebookAccordionView").view(orgID);
+			require("forms/phonebookTableView").view(orgID);
 		});
 	}
 	
@@ -146,7 +147,9 @@
 				// });
 			}
 			db.init(function(){
-					display();
+				$(".mainMenu li").removeClass("selected");
+				$(".mainMenu .mnSearch").addClass("selected");
+				display();
 			});
 		}
 	};
