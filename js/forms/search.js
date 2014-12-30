@@ -42,6 +42,20 @@
 				:"Найдено {0} записей:";
 			return p({style:"font-weight:bold; margin:10px 0 8px 0;"}, format(tpl, count));
 		}},
+		orgLink: function(itm){with($H){
+			var orgName = itm.parent.name;
+			if(itm.xmltype=="person"){
+				var org = itm.parent.parent;
+				while(org){
+					orgName = org.name+", "+orgName;
+					org = org.parent;
+				}
+			}
+			return span(
+				{"class":"link orglink", orgID:itm.parent.id, title:"Показать организацию"}, 
+				orgName
+			);
+		}},
 		report: function(res){with($H){
 			if(!res.length) return "";
 			var columns = db.getColumns();
@@ -60,7 +74,7 @@
 										:itm.xmltype=="organization"?"Вышестоящая организация "
 										:null
 								),
-								span({"class":"link orglink", orgID:itm.parent.id, title:"Показать организацию"}, itm.parent.name)
+								templates.orgLink(itm)
 							):null,
 							apply(itm, function(v, k){
 								if(k=="xmltype" || k=="xmlchildren" || k=="name" || k=="fio" || k=="parent" || k=="id") return;
