@@ -43,8 +43,10 @@ define("forms/phonebookTableView", [
 			return markup(
 				tr(th({colspan:colCount, align:"left"}, org.name)),
 				apply(org.xmlchildren, function(xCh){
-					return xCh.xmltype=="organization"? templates.organization(xCh, colCount, columns)
-						:templates.person(xCh, columns);
+					return xCh.xmltype=="person"? templates.person(xCh, columns):null;
+				}),
+				apply(org.xmlchildren, function(xCh){
+					return xCh.xmltype=="organization"? templates.organization(xCh, colCount, columns) : null;
 				})
 			);
 		}},
