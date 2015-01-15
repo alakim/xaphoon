@@ -3,9 +3,9 @@
 	<groups>
 		<group id="admins" name="Администраторы">
 			<access>
-				<!--organization id="i2"/>
-				<organization id="i6"/>
-				<organization id="i8"/-->
+				<!--allow org="i2"/>
+				<allow org="i6"/>
+				<allow org="i8"/-->
 				<users/>
 				<verification/>
 			</access>
@@ -21,8 +21,9 @@
 		<user id="iii" name="Иванов И.И." bgnDate="2012-01-01" endDate="2016-12-31" password="36347412c7d30ae6fde3742bbc4f21b9">
 			<member group="editors"/>
 			<access>
-				<organization id="test"/>
-				<!--organization id="ivc_mosstroy"/-->
+				<allow org="test"/>
+				<allow org="ivc_mosstroy"/>
+				<deny org="id56"/>
 			</access>
 		</user>
 		<user id="ppp" name="Петров П.П." bgnDate="2012-01-01" endDate="2013-12-31" password="f27f6f1c7c5cbf4e3e192e0a47b85300">

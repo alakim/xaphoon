@@ -39,14 +39,15 @@
 					tr(th("Логин"), td(input(attrLogin)),
 						util.validMsg("$login")),
 					tr(th("Имя"), td(input({type:"text", style:"width:500px;", "data-bind":"value:$name"}))),
-					tr(th("Организация"), td(
-						select({"data-bind":"value:$organization"},
-							option({value:"0"}, "----"),
-							apply(db.getAllOrganizations(), function(org){
-								return option({value:org.id}, org.name);
-							})
-						)
-					)),
+					// tr(th("Организация"), td(
+					// 	select({"data-bind":"value:$organization"},
+					// 		option({value:"0"}, "----"),
+					// 		apply(db.getAllOrganizations(), function(org){
+					// 			return option({value:org.id}, org.name);
+					// 		})
+					// 	)
+					// )),
+					tr(th("Доступ"), td({"class":"pnlAccess"})),
 					tr(th("Новый пароль"), td(input({type:"password", style:"width:500px;", "data-bind":"value:$password1"}))),
 					tr(th("Повторите пароль"), td(input({type:"password", style:"width:500px;", "data-bind":"value:$password2"}),
 						util.validMsg("$password2"))),
@@ -55,6 +56,13 @@
 						img({src:"images/wait.gif", "class":"usrDlgWait", style:"display:none;"})
 					))
 				)
+			);
+		}},
+		accessList: function(userData){with($H){
+			return div(
+				apply(userData.access, function(v, k){
+					return span(k, ":", v?"+":"-", " ");
+				})
 			);
 		}}
 	};
@@ -80,7 +88,10 @@
 	function selectUser(id){
 		var pnl = $(".pnlEdit");
 		pnl.html(templates.userDialog());
-		ko.applyBindings(new UserModel(users.index[id]), pnl.find("div")[0]);
+		var userData = users.index[id];
+		//console.log(userData);
+		ko.applyBindings(new UserModel(userData), pnl.find("div")[0]);
+		pnl.find(".pnlAccess").html(templates.accessList(userData));
 	}
 	
 	function UserModel(user){var _=this;

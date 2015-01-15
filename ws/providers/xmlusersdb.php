@@ -39,9 +39,14 @@ class XmlUsersDB{
 			$nm = Util::conv($usr->getAttribute('name'));
 			echo("{\"login\":\"".$id."\",\"name\":\"".$nm."\"");
 			if($fullMode){
-				$org = $xp->query('access/organization/@id', $usr);
-				if($org->length>0)
-					echo(',"organization":"'.$org->item(0)->nodeValue.'"');
+				$access = $this->getAccess($id);
+				echo(',"access":{');
+				$first = true;
+				foreach($access as $k=>$v){
+					if($first)$first=false; else echo(',');
+					echo('"'.$k.'":'.($v?'1':'0'));
+				}
+				echo('}');
 			}
 			echo('},');
 		}
@@ -58,6 +63,45 @@ class XmlUsersDB{
 		$users = $xp->query("//users/user[@id='$usrID']");
 		if($users->length==0) return;
 		return Util::conv($users->item(0)->getAttribute('name'));
+	}
+	
+	private function addAccess($acc, &$permissions){
+		if($acc->tagName=="users")
+			$permissions["@users"] = true;
+		else if($acc->tagName=="verification")
+			$permissions["@verification"] = true;
+		else if($acc->tagName=="allow"){
+			$orgID = $acc->getAttribute('org');
+			$permissions[$orgID] = true;
+		}
+		else if($acc->tagName=="deny"){
+			$orgID = $acc->getAttribute('org');
+			$permissions[$orgID] = false;
+		}
+	}
+	
+	function getAccess($usrID){
+		$db = $this->dbDoc;
+		if($db=='') return;
+		$doc = new DOMDocument('1.0', 'UTF-8');
+		$doc->load('xmlData/'.$db);
+		$xp = new DOMXPath($doc);
+		
+		$permissions = array();
+		
+		$groups = $xp->query("//users/user[@id='$usrID']/member/@group");
+		foreach($groups as $grp){
+			$grpID = $grp->value;
+			$access = $xp->query("//groups/group[@id='$grpID']/access/*");
+			foreach($access as $acc){
+				$this->addAccess($acc, $permissions);
+			}
+		}
+		$usrAccess = $xp->query("//users/user[@id='$usrID']/access/*");
+		foreach($usrAccess as $acc){
+			$this->addAccess($acc, $permissions);
+		}
+		return $permissions;
 	}
 	
 	function writeUserPermissions($usrID){

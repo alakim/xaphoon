@@ -1,6 +1,7 @@
 ﻿define("forms/adminMenu", [
 	"jquery", "html", "knockout", 
 	"errors",
+	"db",
 	"forms/authorization", 
 	"forms/users", 
 	"forms/dataInput", 
@@ -14,6 +15,7 @@
 ], function(
 	$, $H, ko, 
 	errors,
+	db,
 	authorization,
 	users,
 	dataInput,
@@ -34,6 +36,7 @@
 				usr.ticket && permissions.users?li({"data-bind":"click:showUsers"}, "Пользователи"):null,
 				usr.ticket && permissions.verification?li({"data-bind":"click:verify"}, "Верификация данных"):null,
 				//usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
+				usr.ticket?li({"data-bind":"click:clearCache"}, "Очистить кэш"):null,
 				usr.ticket?li({"data-bind":"click:structColTableInput"}, "Ввод структуры"):null,
 				usr.ticket?li({"data-bind":"click:colTableInput"}, "Табличный ввод по колонкам"):null,
 				usr.ticket?li({"data-bind":"click:viewOrgEditor"}, "Ввод организаций"):null,
@@ -56,6 +59,15 @@
 			},
 			authorization: function(){
 				authorization.view($("#out"));
+			},
+			clearCache: function(){
+				$("#out").html($H.img({src:"images/wait.gif"}));
+				$.post("ws/clearCache.php", {ticket:$USER.ticket}, function(resp){
+					resp = JSON.parse(resp);
+					db.refresh(function(){
+						$("#out").html($H.div(resp.success?"Кэш очищен":resp.error?resp.error:""));
+					});
+				});
 			},
 			logoff: function(){
 				authorization.logoff();
