@@ -4,7 +4,9 @@ require('providers/factory.php');
 include 'identity.php';
 
 $ticket = $_POST["ticket"];
-if($ticket==null){
+$sessions = ProviderFactory::getSessions(null);
+
+if(!$sessions->checkTicket($ticket)){
 	Util::writeError('errAuthorizationRequired');
 	die;
 }

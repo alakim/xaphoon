@@ -136,6 +136,8 @@
 			pnl = $("#out");
 			ticket = $USER.ticket;
 			
+			pnl.html($H.img({src:"images/wait.gif"}));
+			
 			$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){
 				resp = JSON.parse(resp);
 				if(resp.indexOf("users")>=0){

@@ -4,7 +4,9 @@ require('providers/factory.php');
 
 $ticket = $_POST["ticket"];
 $fullMode = $_POST["fullMode"]=='true';
-if($ticket==null){
+$sessions = ProviderFactory::getSessions(null);
+
+if(!$sessions->checkTicket($ticket)){
 	Util::writeError('errAuthorizationRequired');
 	die;
 }
