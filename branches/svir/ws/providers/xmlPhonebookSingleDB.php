@@ -75,10 +75,14 @@ class XmlPhonebookSingleDB{
 		return $this->dbDoc;
 	}
 	
+	function clearCache(){
+		if(file_exists(self::$cachedFile)) unlink(self::$cachedFile);
+	}
+	
 	// сохраняет документ, обновляет кэш
 	function saveDocument(){
 		$this->dbDoc->save(self::$docPath) or die('Error saving '.self::$docPath);
-		if(file_exists(self::$cachedFile)) unlink(self::$cachedFile);
+		$this->clearCache();
 	}
 	
 	// сохраняет данные сотрудника
