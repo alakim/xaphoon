@@ -21,6 +21,14 @@ class XmlUsersSessions{
 		return $xpath->query("/userSessions/user[@id='$usrID']");
 	}
 	
+	function checkTicket($ticket){
+		if(is_null($ticket)) return false;
+		$xDoc = self::getDoc();
+		$xpath = new DOMXPath($xDoc);
+		$user = $xpath->query("/userSessions/user[@ticket='$ticket']");
+		return $user->length>0;
+	}
+	
 	function getAuthorizedUser($ticket){
 		$xDoc = self::getDoc();
 		$xpath = new DOMXPath($xDoc);

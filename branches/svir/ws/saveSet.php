@@ -9,7 +9,9 @@ $ticket = $_POST["ticket"];
 $orgID = $_POST["orgID"];
 $jsonPersons = $_POST["persons"];
 
-if($ticket==null){
+$sessions = ProviderFactory::getSessions(null);
+
+if(!$sessions->checkTicket($ticket)){
 	Util::writeError('errAuthorizationRequired');
 	die;
 }

@@ -3,9 +3,9 @@
 	<groups>
 		<group id="admins" name="Администраторы">
 			<access>
-				<organization id="i2"/>
+				<!--organization id="i2"/>
 				<organization id="i6"/>
-				<organization id="i8"/>
+				<organization id="i8"/-->
 				<users/>
 				<verification/>
 			</access>
@@ -15,21 +15,24 @@
 	</groups>
 	<users>
 		<!-- в качестве пароля пользователей использованы их идентификаторы -->
-		<user id="sa" name="Системный администратор" bgnDate="01.01.2012" endDate="31.12.2015" password="c12e01f2a13ff5587e1e9e4aedb8242d">
+		<user id="sa" name="Системный администратор" bgnDate="2012-01-01" password="c12e01f2a13ff5587e1e9e4aedb8242d">
 			<member group="admins"/>
 		</user>
-		<user id="iii" name="Иванов И.И." bgnDate="01.01.2013" endDate="31.12.2013" password="36347412c7d30ae6fde3742bbc4f21b9">
+		<user id="iii" name="Иванов И.И." bgnDate="2012-01-01" endDate="2016-12-31" password="36347412c7d30ae6fde3742bbc4f21b9">
+			<member group="editors"/>
 			<access>
 				<organization id="test"/>
 				<!--organization id="ivc_mosstroy"/-->
 			</access>
 		</user>
-		<user id="ppp" name="Петров П.П." bgnDate="01.01.2013" endDate="31.12.2013" password="f27f6f1c7c5cbf4e3e192e0a47b85300">
+		<user id="ppp" name="Петров П.П." bgnDate="2012-01-01" endDate="2013-12-31" password="f27f6f1c7c5cbf4e3e192e0a47b85300">
 			<member group="editors"/>
 		</user>
-		<user id="sss" name="Сидоров С.С." bgnDate="01.01.2013" endDate="31.12.2013" password="9f6e6800cfae7749eb6c486619254b9c">
+		<user id="sss" name="Сидоров С.С." bgnDate="2012-01-01" endDate="2013-12-31" password="9f6e6800cfae7749eb6c486619254b9c">
+			<member group="editors"/>
 		</user>
-		<user id="ssss" name="Сидоренко С.С." bgnDate="01.01.2013" endDate="31.12.2013" password="8f60c8102d29fcd525162d02eed4566b">
+		<user id="ssss" name="Сидоренко С.С." bgnDate="2012-01-01" endDate="2015-12-31" password="8f60c8102d29fcd525162d02eed4566b">
+			<member group="editors"/>
 		</user>
 	</users>
 </usersDB>

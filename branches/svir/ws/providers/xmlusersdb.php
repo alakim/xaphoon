@@ -18,7 +18,13 @@ class XmlUsersDB{
 		
 		$users = $xp->query("//users/user[@id='$usrID']");
 		if($users->length==0) return false;
-		return $users->item(0)->getAttribute('password')==md5($password);
+		
+		$passwordChecked = $users->item(0)->getAttribute('password')==md5($password);
+		
+		$endDate = $users->item(0)->getAttribute('endDate');
+		$dateChecked = $endDate!=null;
+		
+		return $passwordChecked;// && $dateChecked;
 	}
 	
 	function writeSimpleUsersList($fullMode){
