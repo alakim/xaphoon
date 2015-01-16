@@ -29,12 +29,11 @@
 ){
 
 	function template(permissions){with($H){
-		//var usr = authorization.user();
 		var usr = $USER;
 		return div(
 			ul({"class":"menu"},
-				usr.ticket && permissions.users?li({"data-bind":"click:showUsers"}, "Пользователи"):null,
-				usr.ticket && permissions.verification?li({"data-bind":"click:verify"}, "Верификация данных"):null,
+				usr.ticket && permissions["@users"]?li({"data-bind":"click:showUsers"}, "Пользователи"):null,
+				usr.ticket && permissions["@verification"]?li({"data-bind":"click:verify"}, "Верификация данных"):null,
 				//usr.ticket?li({"data-bind":"click:tableInput"}, "Табличный ввод"):null,
 				usr.ticket?li({"data-bind":"click:clearCache"}, "Очистить кэш"):null,
 				usr.ticket?li({"data-bind":"click:structColTableInput"}, "Ввод структуры"):null,
@@ -103,13 +102,7 @@
 			if(!pnl) pnl = $(".mainMenu");
 			panel = pnl;
 			$.post("ws/userPermissions.php", {ticket:$USER.ticket}, function(resp){
-				var permissions = {organizations:[]};
-				$.each(JSON.parse(resp), function(i, el){
-					if(typeof(el)=="string") permissions[el]=true;
-					else if(el.organization) permissions.organizations.push(el.organization);
-				})
-				//console.log(perms);
-				pnl.html(template(permissions));
+				pnl.html(template(JSON.parse(resp)));
 				ko.applyBindings(new Model(), pnl.find("div")[0]);
 			});
 		}
