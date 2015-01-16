@@ -49,19 +49,49 @@
 		
 	}
 	
-	function getOrgTree(coll){
-		coll = coll || localDB.data.organizations;
+	function getOrgTree(coll, deny){
 		var res = [];
-		$.each(coll, function(i, nd){
-			if(nd.xmltype=="organization"){
-				//var el = {id:nd.id, name:nd.name, parent:nd.parent, priority:nd.priority};
-				var el = {id:nd.id, name:nd.name, parent:nd.parent};
-				if(nd.xmlchildren&&nd.xmlchildren.length){
-					el.children = getOrgTree(nd.xmlchildren);
-				}
-				res.push(el);
+		
+		function addNode(nd, res, deny){
+			deny = deny || {};
+			var el = {id:nd.id, name:nd.name, parent:nd.parent};
+			if(nd.xmlchildren&&nd.xmlchildren.length){
+				el.children = getOrgTree(nd.xmlchildren, deny);
 			}
-		});
+			res.push(el);
+		}
+		
+		if(!coll){
+			var perms = $USER.permissions;
+				allow = [],
+				deny = {};
+			for(var k in perms){
+				if(k.match(/^@/)) continue;
+				if(perms[k]) allow.push(k);
+					else deny[k] = true;
+			}
+			if(!allow.length){
+				$.each(localDB.data.organizations, function(i, nd){
+					if(nd.xmltype=="organization" && !deny[nd.id]){
+						addNode(nd, res, deny);
+					}
+				});
+			}
+			else{
+				$.each(allow, function(i, id){
+					var nd = organizationIndex[id];
+					addNode(nd, res, deny);
+				});
+			}
+		}
+		else{
+			deny = deny || {};
+			$.each(coll, function(i, nd){
+				if(nd.xmltype=="organization" && !deny[nd.id]){
+					addNode(nd, res, deny);
+				}
+			});
+		}
 		return res;
 	}
 	
@@ -87,7 +117,6 @@
 			$.post("ws/phonebook.php", {}, function(resp){
 				var data = JSON.parse(resp);
 				$(".mainPanel").html("");
-				//console.log(data);
 				localDB.data = data;
 				indexDB();
 				callback();

@@ -17,7 +17,8 @@
 		$USER = {
 			ticket: "<?=$ticket?>",
 			name: "<?=$usrName?>",
-			login: "<?=$usrID?>"
+			login: "<?=$usrID?>",
+			permissions:null
 		};
 		if(!$USER.ticket || !$USER.ticket.length) $USER.ticket = null;
 	</script>

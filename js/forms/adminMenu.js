@@ -102,7 +102,8 @@
 			if(!pnl) pnl = $(".mainMenu");
 			panel = pnl;
 			$.post("ws/userPermissions.php", {ticket:$USER.ticket}, function(resp){
-				pnl.html(template(JSON.parse(resp)));
+				$USER.permissions = JSON.parse(resp);
+				pnl.html(template($USER.permissions));
 				ko.applyBindings(new Model(), pnl.find("div")[0]);
 			});
 		}
