@@ -22,9 +22,14 @@ class XmlUsersDB{
 		$passwordChecked = $users->item(0)->getAttribute('password')==md5($password);
 		
 		$endDate = $users->item(0)->getAttribute('endDate');
-		$dateChecked = $endDate!=null;
+		if($endDate==null) return $passwordChecked;
 		
-		return $passwordChecked;// && $dateChecked;
+		$now = new DateTime();
+		$T2 = new DateTime($endDate);
+		$D = $now->diff($T2);
+		$TooOld = $D->format('%R') == '-';
+		
+		return $passwordChecked && !$TooOld;
 	}
 	
 	function writeSimpleUsersList($fullMode){
@@ -113,37 +118,15 @@ class XmlUsersDB{
 		
 		$groups = $xp->query("//users/user[@id='$usrID']/member/@group");
 		
-		function writeAccess($acc){
-			if($acc->tagName=="users")
-				echo('"users"');
-			
-			else if($acc->tagName=="verification")
-				echo('"verification"');
-			
-			else if($acc->tagName=="organization"){
-				$orgID = $acc->getAttribute('id');
-				echo('{"organization":"'.$orgID.'"}');
-			}
-		}
-		
-		echo("[");
+		$permissions = $this->getAccess($usrID);
+		echo("{");
 		$first = true;
-		foreach($groups as $grp){
-			$grpID = $grp->value;
-			$access = $xp->query("//groups/group[@id='$grpID']/access/*");
-			foreach($access as $acc){
-				if($first)$first=false; else echo(',');
-				writeAccess($acc);
-			}
-		}
-		
-		$usrAccess = $xp->query("//users/user[@id='$usrID']/access/*");
-		foreach($usrAccess as $acc){
+		foreach($permissions as $k=>$v){
 			if($first)$first=false; else echo(',');
-			writeAccess($acc);
+			echo('"'.$k.'":'.($v?'1':'0'));
 		}
+		echo("}");
 		
-		echo("]");
 	}
 	
 	

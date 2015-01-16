@@ -59,9 +59,16 @@
 			);
 		}},
 		accessList: function(userData){with($H){
+			var count = 0;
 			return div(
+				"открыто: ",
 				apply(userData.access, function(v, k){
-					return span(k, ":", v?"+":"-", " ");
+					return v?span(count++?", ":"", k):null;
+				}),
+				count=0?"":"",
+				"; закрыто: ",
+				apply(userData.access, function(v, k){
+					return !v?span(count++?", ":"", k):null;
 				})
 			);
 		}}
@@ -151,7 +158,7 @@
 			
 			$.post("ws/userPermissions.php", {ticket:ticket}, function(resp){
 				resp = JSON.parse(resp);
-				if(resp.indexOf("users")>=0){
+				if(resp["@users"]){
 					db.init(function(){
 						displayView();
 					});
