@@ -37,16 +37,15 @@
 				});
 			}
 		}
-		$.each(localDB.data.organizations, function(i, org){
-			indexNode(org);
-		});
+		for(var orgID in localDB.data.organizations){
+			indexNode(localDB.data.organizations[orgID]);
+		}
 		
 		personTypeColumns = [];
 		for(var k in pCols) personTypeColumns.push(k);
 		
 		orgTypeColumns = [];
-		for(var k in oCols) orgTypeColumns.push(k);
-		
+		for(var k in oCols) orgTypeColumns.push(k);		
 	}
 	
 	function getOrgTree(coll, deny){
@@ -112,15 +111,23 @@
 			$(".mainPanel").html($H.img({src:"images/wait.gif"}));
 			if(localDB.data){
 				callback();
-				return;
 			}
-			$.post("ws/phonebook.php", {}, function(resp){
-				var data = JSON.parse(resp);
-				$(".mainPanel").html("");
-				localDB.data = data;
-				indexDB();
-				callback();
-			});
+			else{
+				if($DATA){
+					localDB.data = $DATA;
+					indexDB();
+					callback();
+				}
+				else{
+					$.post("ws/phonebook.php", {}, function(resp){
+						var data = JSON.parse(resp);
+						$(".mainPanel").html("");
+						localDB.data = data;
+						indexDB();
+						callback();
+					});
+				}
+			}
 		},
 		refresh: function(callback){
 			localDB.data = null;

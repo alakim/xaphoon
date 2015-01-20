@@ -14,18 +14,21 @@
 	function Model(){var _=this;
 		_.showTree = function(){
 			$("#out").html($H.img({src:"images/wait.gif"}));
-			phonebookView.view();
+			setTimeout(function(){
+				phonebookView.view();
+			}, 100);
 		};
 		_.showTable = function(){
 			$("#out").html($H.img({src:"images/wait.gif"}));
 			setTimeout(function(){
 				phonebookTable.view();
 			}, 100);
-			//phonebook.view();
 		};
 		_.search = function(){
 			$("#out").html($H.img({src:"images/wait.gif"}));
-			search.view();
+			setTimeout(function(){
+				search.view();
+			}, 100);
 		};
 	}
 	
@@ -35,6 +38,7 @@
 			var model = new Model();
 			ko.applyBindings(model, pnl.find("div")[0]);
 			model.search();
+			//model.showTable();
 		}
 	};
 });

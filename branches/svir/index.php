@@ -7,7 +7,18 @@
 	<link rel="stylesheet" type="text/css" href="styles.css"/>
 	
 	<!-- main_pub || main -->
-	<script type="text/javascript" data-main="js/main" src="js/lib/require.js"></script>
+	<script type="text/javascript" data-main="js/main_pub" src="js/lib/require.js"></script>
+	
+	<script type="text/javascript">
+		var $DATA = <?php 
+			ini_set("include_path", "ws");
+			require('providers/factory.php');
+			XmlPhonebookSingleDB::$cachedFile = 'cache/phonebook';
+			XmlPhonebookSingleDB::$docPath = 'ws/xmlData/phonebook/single/phonebook.xml';
+			$dbProvider = ProviderFactory::getPhonebook();
+			$dbProvider->writeContent($clearCache);
+		?>;
+	</script>
 </head>
 <body>
 	<?php include 'header.php'; ?>
