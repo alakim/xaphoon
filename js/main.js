@@ -6,7 +6,8 @@
 		jspath:"lib/jspath",
 		knockout:"lib/knockout-3.1.0"
     },
-	urlArgs: "bust=" + (new Date()).getTime(),
+	//urlArgs: "bust=" + (new Date()).getTime(),
+	urlArgs: "bust=2.0",
 	shim:{
 		"html":{exports:"Html"},
 		"jspath":{exports:"JsPath"}

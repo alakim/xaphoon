@@ -93,7 +93,6 @@ define("forms/phonebookTableView", [
 					pnl.find(".node").click(function(){
 						el=$(this);
 						var oID = el.attr("orgID");
-						//console.log(oID);
 						pnl.slideUp();
 						display(oID);
 						btn.show();

@@ -113,7 +113,7 @@
 			itmType = $("#out .selItemType").val(),
 			field = $("#out .selSearchField").val();
 		
-		if(!sStr || !sStr.length){
+		if(!sStr || sStr.length<2){
 			$("#resPnl").html("");
 			return;
 		}
@@ -161,9 +161,11 @@
 				// });
 			}
 			db.init(function(){
+				//console.log("A: ", new Date());
 				$(".mainMenu li").removeClass("selected");
 				$(".mainMenu .mnSearch").addClass("selected");
 				display();
+				//console.log("B: ", new Date());
 			});
 		}
 	};
